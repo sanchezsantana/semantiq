@@ -1,0 +1,72 @@
+{
+    "productos": {
+        "description": "Catálogo de productos que la ferretería vende o mantiene en inventario.",
+        "fields": {
+            "id_producto": "Identificador único del producto (por ejemplo, 'P001').",
+            "nombre": "Nombre comercial del producto.",
+            "descripcion": "Detalle del producto, incluyendo material, uso o especificaciones.",
+            "precio_unitario": "Precio de venta unitario vigente para clientes.",
+            "stock": "Cantidad de unidades disponibles en inventario después de las compras y ventas.",
+            "fecha_creacion": "Fecha en la que el producto fue incorporado al catálogo."
+        }
+    },
+    "proveedores": {
+        "description": "Información de los proveedores que suministran productos a la ferretería.",
+        "fields": {
+            "id_proveedor": "Identificador único del proveedor.",
+            "nombre_proveedor": "Nombre o razón social del proveedor.",
+            "contacto": "Nombre del contacto principal.",
+            "telefono": "Teléfono de contacto.",
+            "ciudad": "Ciudad donde se ubica el proveedor."
+        }
+    },
+    "clientes": {
+        "description": "Datos de los clientes que realizan compras en la ferretería.",
+        "fields": {
+            "id_cliente": "Identificador único del cliente.",
+            "nombre_cliente": "Nombre o razón social del cliente.",
+            "tipo_cliente": "Tipo de cliente (Particular, Empresa o Comercio).",
+            "telefono": "Teléfono de contacto del cliente.",
+            "ciudad": "Ciudad de residencia o ubicación del cliente."
+        }
+    },
+    "compras": {
+        "description": "Registra las compras realizadas a proveedores.",
+        "fields": {
+            "id_compra": "Identificador único de la compra.",
+            "fecha_compra": "Fecha en que se efectuó la compra.",
+            "id_proveedor": "Referencia al proveedor que realizó la venta a la ferretería.",
+            "total": "Suma total de la compra (coincide con la suma de los detalles asociados)."
+        }
+    },
+    "detalle_compras": {
+        "description": "Registra cada producto incluido en una compra específica.",
+        "fields": {
+            "id_detalle_compra": "Identificador único del registro de detalle.",
+            "id_compra": "Referencia a la compra principal (compras.id_compra).",
+            "id_producto": "Producto adquirido en la compra (productos.id_producto).",
+            "cantidad": "Número de unidades compradas.",
+            "precio_compra_unitario": "Precio de costo por unidad en esa compra."
+        }
+    },
+    "ventas": {
+        "description": "Registra las ventas realizadas a clientes.",
+        "fields": {
+            "id_venta": "Identificador único de la venta.",
+            "fecha_venta": "Fecha en que se realizó la venta.",
+            "id_cliente": "Cliente que realizó la compra (clientes.id_cliente).",
+            "total": "Monto total de la venta (suma de los detalles de venta)."
+        }
+    },
+    "detalle_ventas": {
+        "description": "Registra cada producto vendido en una transacción específica.",
+        "fields": {
+            "id_detalle_venta": "Identificador único del detalle de venta.",
+            "id_venta": "Referencia a la venta principal (ventas.id_venta).",
+            "id_producto": "Producto vendido (productos.id_producto).",
+            "cantidad": "Cantidad de unidades vendidas.",
+            "precio_venta_unitario": "Precio de venta unitario aplicado en esa transacción."
+        }
+    },
+    "relations": "proveedores -> compras -> detalle_compras -> productos -> detalle_ventas -> ventas -> clientes"
+}

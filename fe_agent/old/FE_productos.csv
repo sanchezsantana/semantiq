@@ -1,0 +1,11 @@
+id_producto,nombre,descripcion,precio_unitario,stock,fecha_creacion
+P001,Martillo carpintero,Martillo de acero con mango de madera,6.75,394,2024-12-15
+P002,Taladro eléctrico 500W,Taladro con velocidad variable y reversa,52.92,27,2024-12-15
+P003,Clavos 2” caja 100u,Clavos galvanizados 2 pulgadas caja 100,2.37,635,2024-12-15
+P004,Sierra circular 1200W,Sierra circular uso profesional,89.79,0,2024-12-15
+P005,Guantes de seguridad,Guantes resistentes al corte,4.93,228,2024-12-15
+P006,Destornillador plano,Destornillador mango ergonómico,2.1,14,2024-12-15
+P007,Llave ajustable 10”,Llave inglesa de 10 pulgadas,7.97,166,2024-12-15
+P008,Brocas mixtas 10u,Set de 10 brocas para metal y madera,8.32,95,2024-12-15
+P009,Cinta métrica 5m,Cinta métrica retráctil 5 metros,3.31,145,2024-12-15
+P010,Mascarilla N95 caja 20u,Protección respiratoria N95 caja 20,10.48,315,2024-12-15

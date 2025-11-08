@@ -1,0 +1,74 @@
+{
+  "name": "FE_TotalVentas",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fe_total_ventas",
+        "responseMode": "responseNode"
+      },
+      "id": "Webhook_FE_TotalVentas",
+      "name": "Webhook FE_TotalVentas",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "language": "javascript",
+        "jsCode": "return [{\n  json: {\n    ok: true,\n    accion: \"consultar_total_ventas\",\n    periodo: \"2025-10\",\n    total_ventas: 1275000,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "Code_FE_TotalVentas",
+      "name": "Code FE_TotalVentas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {},
+      "id": "Respond_FE_TotalVentas",
+      "name": "Respond to Webhook FE_TotalVentas",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Webhook_FE_TotalVentas": {
+      "main": [
+        [
+          {
+            "node": "Code FE_TotalVentas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code_FE_TotalVentas": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook FE_TotalVentas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": "FE_TotalVentas_001",
+  "versionId": "1",
+  "meta": {
+    "template": "Semantiq_FE",
+    "description": "Workflow base para endpoint /fe_total_ventas",
+    "created": "2025-11-02T23:59:00.000Z"
+  },
+  "tags": [
+    {
+      "name": "Semantiq_FE"
+    }
+  ]
+}

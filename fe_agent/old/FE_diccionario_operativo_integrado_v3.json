@@ -1,0 +1,1045 @@
+{
+  "acciones_operativas": {
+    "consultar_total_ventas": {
+      "descripcion": "Calcula el total de ventas realizadas en un período determinado.",
+      "pregunta_modelo": "¿Cuál fue el total de ventas durante el trimestre?",
+      "id_pregunta": 1,
+      "id_prompt": 1,
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_total_ventas",
+      "webhook": "http://localhost:5678/webhook/fe_total_ventas",
+      "output_esperado": "valor_total",
+      "respuesta_tipo": "texto",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "El total de ventas entre enero y marzo de 2025 fue de aproximadamente $45.200, considerando las 150 transacciones registradas.",
+        "estructura_tabla": null
+      },
+      "prioridad": "Media"
+    },
+    "consultar_total_compras": {
+      "descripcion": "Calcula el total de compras realizadas a los proveedores en un período.",
+      "pregunta_modelo": "¿Cuál fue el total de compras realizadas a los proveedores durante el mismo período?",
+      "id_pregunta": 2,
+      "id_prompt": 2,
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "compras"
+      ],
+      "funcion_python": "get_total_compras",
+      "webhook": "http://localhost:5678/webhook/fe_total_compras",
+      "output_esperado": "valor_total",
+      "respuesta_tipo": "texto",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "El total de compras a proveedores fue de aproximadamente $36.800 distribuidas en 27 órdenes de compra.",
+        "estructura_tabla": null
+      },
+      "prioridad": "Media"
+    },
+    "calcular_margen_global": {
+      "descripcion": "Compara ventas y compras totales para calcular el margen global del período.",
+      "pregunta_modelo": "¿Cuál fue el margen de ganancia global del período?",
+      "id_pregunta": 3,
+      "id_prompt": 3,
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "compras"
+      ],
+      "funcion_python": "get_margen_global",
+      "webhook": "http://localhost:5678/webhook/fe_margen_global",
+      "output_esperado": "tabla_resumen",
+      "respuesta_tipo": "tabla",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "{\"Indicador\": [\"Total Ventas\", \"Total Compras\", \"Margen Global\"], \"Valor\": [\"$45.200\", \"$36.800\", \"22.8%\"]}",
+        "estructura_tabla": [
+          "Indicador",
+          "Valor"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "obtener_top_productos_vendidos": {
+      "descripcion": "Identifica los productos más vendidos en el período y calcula la rotación.",
+      "pregunta_modelo": "¿Cuáles fueron los 5 productos más vendidos?",
+      "id_pregunta": 4,
+      "id_prompt": 4,
+      "input_requerido": [
+        "n_top"
+      ],
+      "fuente_datos": [
+        "detalle_ventas",
+        "productos"
+      ],
+      "funcion_python": "get_top_productos_vendidos",
+      "webhook": "http://localhost:5678/webhook/fe_top_productos_vendidos",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Producto",
+          "Unidades Vendidas",
+          "Total en Ventas ($)"
+        ]
+      },
+      "prioridad": "Media"
+    },
+    "obtener_producto_max_ingreso": {
+      "descripcion": "Identifica el producto con mayor ingreso total.",
+      "pregunta_modelo": "¿Qué producto generó más ingresos totales?",
+      "id_pregunta": 5,
+      "id_prompt": 5,
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_producto_max_ingreso",
+      "webhook": "http://localhost:5678/webhook/fe_producto_max_ingreso",
+      "output_esperado": "producto_y_valor",
+      "respuesta_tipo": "texto",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "El producto con mayor ingreso total fue 'Taladro eléctrico 500W', con ventas acumuladas de $12.500.",
+        "estructura_tabla": null
+      },
+      "prioridad": "Media"
+    },
+    "obtener_top_clientes": {
+      "descripcion": "Lista los clientes con mayores compras durante el período.",
+      "pregunta_modelo": "¿Qué clientes compraron más durante el trimestre?",
+      "id_pregunta": 6,
+      "id_prompt": 6,
+      "input_requerido": [
+        "n_top"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "clientes"
+      ],
+      "funcion_python": "get_top_clientes",
+      "webhook": "http://localhost:5678/webhook/fe_top_clientes",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Cliente",
+          "Total de compras ($)",
+          "Número de transacciones"
+        ]
+      },
+      "prioridad": "Media"
+    },
+    "obtener_top_proveedores": {
+      "descripcion": "Muestra los proveedores con mayor volumen de compras.",
+      "pregunta_modelo": "¿Qué proveedores fueron los más importantes por volumen de compra?",
+      "id_pregunta": 7,
+      "id_prompt": 7,
+      "input_requerido": [
+        "n_top"
+      ],
+      "fuente_datos": [
+        "compras",
+        "proveedores"
+      ],
+      "funcion_python": "get_top_proveedores",
+      "webhook": "http://localhost:5678/webhook/fe_top_proveedores",
+      "output_esperado": [
+        "tabla",
+        "grafico_pie"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Proveedor",
+          "Monto total comprado ($)",
+          "Órdenes de compra"
+        ]
+      },
+      "prioridad": "Media"
+    },
+    "analizar_ventas_mensuales": {
+      "descripcion": "Analiza el comportamiento de las ventas mes a mes.",
+      "pregunta_modelo": "¿Cómo se comportaron las ventas mes a mes?",
+      "id_pregunta": 8,
+      "id_prompt": 8,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_ventas_mensuales",
+      "webhook": "http://localhost:5678/webhook/fe_ventas_mensuales",
+      "output_esperado": [
+        "tabla",
+        "grafico_linea"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Mes",
+          "Total de Ventas ($)",
+          "Número de Ventas"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "comparar_unidades_compradas_vendidas": {
+      "descripcion": "Compara las unidades compradas y vendidas de cada producto para detectar diferencias de stock.",
+      "pregunta_modelo": "¿Qué producto tuvo la mayor diferencia entre unidades compradas y vendidas?",
+      "id_pregunta": 9,
+      "id_prompt": 9,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_compras",
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_diferencia_unidades",
+      "webhook": "http://localhost:5678/webhook/fe_diferencia_unidades",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Producto",
+          "Compradas",
+          "Vendidas",
+          "Diferencia"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "consultar_stock_actual": {
+      "descripcion": "Muestra el stock actual y el valor del inventario.",
+      "pregunta_modelo": "¿Cuál es el stock actual por producto?",
+      "id_pregunta": 10,
+      "id_prompt": 10,
+      "input_requerido": [],
+      "fuente_datos": [
+        "productos",
+        "detalle_compras",
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_stock_actual",
+      "webhook": "http://localhost:5678/webhook/fe_stock_actual",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "consulta",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Producto",
+          "Stock Actual",
+          "Precio Unitario",
+          "Valor de Inventario ($)"
+        ]
+      },
+      "prioridad": "Media"
+    },
+    "calcular_margen_por_producto": {
+      "descripcion": "Calcula el margen promedio por producto considerando precios de compra y venta.",
+      "pregunta_modelo": "¿Qué productos tuvieron margen de ganancia más alto?",
+      "id_pregunta": 11,
+      "id_prompt": 11,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_compras",
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_margen_por_producto",
+      "webhook": "http://localhost:5678/webhook/fe_margen_por_producto",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Producto",
+          "Precio Compra Promedio",
+          "Precio Venta Promedio",
+          "Margen (%)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_clientes_por_ciudad": {
+      "descripcion": "Analiza la distribución geográfica de los clientes y sus ventas totales.",
+      "pregunta_modelo": "¿Qué ciudades concentran la mayor cantidad de clientes?",
+      "id_pregunta": 12,
+      "id_prompt": 12,
+      "input_requerido": [],
+      "fuente_datos": [
+        "clientes",
+        "ventas"
+      ],
+      "funcion_python": "get_clientes_por_ciudad",
+      "webhook": "http://localhost:5678/webhook/fe_clientes_por_ciudad",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Ciudad",
+          "Clientes",
+          "Ventas Totales ($)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_tipo_cliente": {
+      "descripcion": "Agrupa las ventas según el tipo de cliente (Particular, Empresa, Comercio).",
+      "pregunta_modelo": "¿Qué tipo de cliente compra más?",
+      "id_pregunta": 13,
+      "id_prompt": 13,
+      "input_requerido": [],
+      "fuente_datos": [
+        "clientes",
+        "ventas"
+      ],
+      "funcion_python": "get_ventas_por_tipo_cliente",
+      "webhook": "http://localhost:5678/webhook/fe_ventas_por_tipo_cliente",
+      "output_esperado": [
+        "tabla",
+        "grafico_pie"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Tipo Cliente",
+          "Ventas Totales ($)",
+          "% del Total"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_ventas_por_dia": {
+      "descripcion": "Analiza las ventas por día para detectar los días con mayor movimiento.",
+      "pregunta_modelo": "¿Cuáles son los días con mayor cantidad de ventas?",
+      "id_pregunta": 14,
+      "id_prompt": 14,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_ventas_por_dia",
+      "webhook": "http://localhost:5678/webhook/fe_ventas_por_dia",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Fecha",
+          "Ventas ($)",
+          "Transacciones"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_diversidad_productos": {
+      "descripcion": "Mide la cantidad de productos distintos vendidos por mes.",
+      "pregunta_modelo": "¿Cuántos productos diferentes se vendieron por mes?",
+      "id_pregunta": 15,
+      "id_prompt": 15,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_diversidad_productos",
+      "webhook": "http://localhost:5678/webhook/fe_diversidad_productos",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Mes",
+          "Productos Distintos Vendidos"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "calcular_ticket_promedio": {
+      "descripcion": "Calcula el ticket promedio mensual.",
+      "pregunta_modelo": "¿Cuál fue el ticket promedio de venta?",
+      "id_pregunta": 16,
+      "id_prompt": 16,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_ticket_promedio",
+      "webhook": "http://localhost:5678/webhook/fe_ticket_promedio",
+      "output_esperado": "tabla",
+      "respuesta_tipo": "tabla",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Mes",
+          "Ventas Totales ($)",
+          "Número de Ventas",
+          "Ticket Promedio ($)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "identificar_clientes_inactivos": {
+      "descripcion": "Identifica los clientes que no han realizado compras en los últimos meses.",
+      "pregunta_modelo": "¿Qué clientes no realizaron compras en los últimos dos meses?",
+      "id_pregunta": 17,
+      "id_prompt": 17,
+      "input_requerido": [
+        "meses_inactividad"
+      ],
+      "fuente_datos": [
+        "clientes",
+        "ventas"
+      ],
+      "funcion_python": "get_clientes_inactivos",
+      "webhook": "http://localhost:5678/webhook/fe_clientes_inactivos",
+      "output_esperado": "tabla",
+      "respuesta_tipo": "tabla",
+      "nivel_usuario": "operativo",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "\"\"",
+        "estructura_tabla": [
+          "Cliente",
+          "Última Fecha de Compra"
+        ]
+      },
+      "prioridad": "Alta"
+    }
+  },
+  "acciones_gerenciales": {
+    "calcular_margen_global_trimestral": {
+      "descripcion": "Calcula el margen bruto global y la variación respecto al trimestre anterior.",
+      "pregunta_modelo": "¿Cuál fue el margen global de ganancia este trimestre?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "compras"
+      ],
+      "funcion_python": "get_margen_global_trimestral",
+      "webhook": "http://localhost:5678/webhook/fe_margen_global_trimestral",
+      "output_esperado": [
+        "tabla",
+        "texto"
+      ],
+      "respuesta_tipo": "tabla+texto",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "El margen bruto fue de 24%, con una variación positiva del 2% respecto al trimestre anterior.",
+        "estructura_tabla": [
+          "Indicador",
+          "Valor",
+          "Variación (%)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "comparar_ventas_trimestres": {
+      "descripcion": "Compara el total de ventas entre dos trimestres consecutivos.",
+      "pregunta_modelo": "¿Cómo se comparan las ventas del último trimestre con el anterior?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "periodo_1",
+        "periodo_2"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "comparar_ventas_trimestres",
+      "webhook": "http://localhost:5678/webhook/fe_comparar_ventas_trimestres",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Las ventas aumentaron un 8% respecto al trimestre anterior.",
+        "estructura_tabla": [
+          "Trimestre",
+          "Ventas ($)",
+          "Variación (%)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_tendencia_ventas_anual": {
+      "descripcion": "Detecta la tendencia de ventas a lo largo del año.",
+      "pregunta_modelo": "¿Cuál ha sido la tendencia de ventas durante el año?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "anio"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "analizar_tendencia_ventas_anual",
+      "webhook": "http://localhost:5678/webhook/fe_tendencia_ventas_anual",
+      "output_esperado": [
+        "grafico_linea",
+        "texto"
+      ],
+      "respuesta_tipo": "grafico+texto",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Se observa una tendencia positiva en las ventas desde enero a diciembre.",
+        "estructura_tabla": [
+          "Mes",
+          "Total Ventas ($)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_rentabilidad_por_categoria": {
+      "descripcion": "Calcula margen promedio por tipo de producto o categoría.",
+      "pregunta_modelo": "¿Qué categorías de productos generan mayor rentabilidad?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_ventas",
+        "detalle_compras",
+        "productos"
+      ],
+      "funcion_python": "get_margen_por_categoria",
+      "webhook": "http://localhost:5678/webhook/fe_margen_por_categoria",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Las categorías de herramientas eléctricas presentan los mayores márgenes.",
+        "estructura_tabla": [
+          "Categoría",
+          "Margen (%)",
+          "Ventas Totales ($)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "evaluar_rotacion_inventario": {
+      "descripcion": "Evalúa la rotación promedio del inventario del período.",
+      "pregunta_modelo": "¿Qué tan rápido se está moviendo el inventario?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_ventas",
+        "productos"
+      ],
+      "funcion_python": "get_rotacion_inventario",
+      "webhook": "http://localhost:5678/webhook/fe_rotacion_inventario",
+      "output_esperado": [
+        "tabla",
+        "grafico_linea"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "La rotación promedio fue de 3.5, equivalente a una renovación cada 1.5 meses.",
+        "estructura_tabla": [
+          "Periodo",
+          "Rotación",
+          "Inventario Promedio",
+          "Ventas Totales"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "detectar_productos_inmovilizados": {
+      "descripcion": "Identifica productos sin ventas en los últimos X meses.",
+      "pregunta_modelo": "¿Qué productos no se han vendido en los últimos meses?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "meses_inactividad"
+      ],
+      "fuente_datos": [
+        "detalle_ventas",
+        "productos"
+      ],
+      "funcion_python": "get_productos_inmovilizados",
+      "webhook": "http://localhost:5678/webhook/fe_productos_inmovilizados",
+      "output_esperado": [
+        "tabla"
+      ],
+      "respuesta_tipo": "tabla",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Se detectaron 12 productos sin movimiento en los últimos 3 meses.",
+        "estructura_tabla": [
+          "Producto",
+          "Última Venta",
+          "Días Sin Venta"
+        ]
+      },
+      "prioridad": "Media"
+    },
+    "clientes_estrategicos": {
+      "descripcion": "Identifica los clientes que representan el 20% superior de las ventas.",
+      "pregunta_modelo": "¿Quiénes son nuestros clientes más importantes?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "clientes"
+      ],
+      "funcion_python": "get_clientes_estrategicos",
+      "webhook": "http://localhost:5678/webhook/fe_clientes_estrategicos",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Los clientes Comersur y FerreAndes concentran el 22% de las ventas totales.",
+        "estructura_tabla": [
+          "Cliente",
+          "Total Comprado ($)",
+          "% de Ventas Totales"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "clientes_en_riesgo": {
+      "descripcion": "Detecta clientes con disminución en frecuencia o monto de compra.",
+      "pregunta_modelo": "¿Qué clientes han reducido sus compras últimamente?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "clientes"
+      ],
+      "funcion_python": "get_clientes_en_riesgo",
+      "webhook": "http://localhost:5678/webhook/fe_clientes_en_riesgo",
+      "output_esperado": [
+        "tabla",
+        "texto"
+      ],
+      "respuesta_tipo": "tabla+texto",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Se identificaron 5 clientes con reducción de compras del 30% respecto al período anterior.",
+        "estructura_tabla": [
+          "Cliente",
+          "Frecuencia",
+          "Variación (%)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "proveedores_mas_confiables": {
+      "descripcion": "Evalúa el cumplimiento de entrega y precios por proveedor.",
+      "pregunta_modelo": "¿Qué proveedores son más confiables en tiempos de entrega?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "compras",
+        "proveedores"
+      ],
+      "funcion_python": "get_proveedores_confiables",
+      "webhook": "http://localhost:5678/webhook/fe_proveedores_confiables",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Los proveedores FerreMax y AceroSur registraron cumplimiento superior al 95%.",
+        "estructura_tabla": [
+          "Proveedor",
+          "Cumplimiento (%)",
+          "Retrasos"
+        ]
+      },
+      "prioridad": "Media"
+    },
+    "analizar_concentracion_proveedores": {
+      "descripcion": "Evalúa dependencia del negocio respecto a los principales proveedores.",
+      "pregunta_modelo": "¿Cuánto dependen nuestras compras de los principales proveedores?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "compras"
+      ],
+      "funcion_python": "analizar_concentracion_proveedores",
+      "webhook": "http://localhost:5678/webhook/fe_concentracion_proveedores",
+      "output_esperado": [
+        "tabla",
+        "grafico_pie"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "El 70% de las compras provienen de los tres principales proveedores.",
+        "estructura_tabla": [
+          "Proveedor",
+          "% de Compras"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "analizar_tendencia_margen": {
+      "descripcion": "Evalúa la tendencia del margen bruto mes a mes.",
+      "pregunta_modelo": "¿Está aumentando o bajando nuestro margen de ganancia?",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "compras"
+      ],
+      "funcion_python": "analizar_tendencia_margen",
+      "webhook": "http://localhost:5678/webhook/fe_tendencia_margen",
+      "output_esperado": [
+        "grafico_linea",
+        "texto"
+      ],
+      "respuesta_tipo": "grafico+texto",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "El margen bruto ha crecido de 20% en enero a 24% en marzo.",
+        "estructura_tabla": [
+          "Mes",
+          "Margen (%)"
+        ]
+      },
+      "prioridad": "Alta"
+    },
+    "generar_resumen_ejecutivo": {
+      "descripcion": "Genera un resumen ejecutivo del negocio (ventas, margen, clientes, stock).",
+      "pregunta_modelo": "Dame un resumen ejecutivo del negocio del trimestre.",
+      "id_pregunta": null,
+      "id_prompt": null,
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "compras",
+        "clientes",
+        "productos"
+      ],
+      "funcion_python": "generar_resumen_ejecutivo",
+      "webhook": "http://localhost:5678/webhook/fe_resumen_ejecutivo",
+      "output_esperado": [
+        "tabla",
+        "texto",
+        "grafico"
+      ],
+      "respuesta_tipo": "tabla+texto+grafico",
+      "nivel_usuario": "gerencial",
+      "tipo_accion": "analisis",
+      "ejemplo_respuesta": {
+        "texto": "Resumen del trimestre: margen 24%, ventas $45M, rotación inventario 3.5.",
+        "estructura_tabla": [
+          "Indicador",
+          "Valor"
+        ]
+      },
+      "prioridad": "Alta"
+    }
+  },
+  "acciones_genericas": {
+    "filtrar_datos": {
+      "descripcion": "Aplica filtros dinámicos a cualquier tabla del sistema según campos, valores o condiciones provistas por el usuario.",
+      "input_requerido": [
+        "tabla",
+        "campo",
+        "condicion",
+        "valor"
+      ],
+      "funcion_python": "filtrar_tabla_generica",
+      "fuente_datos": "variable",
+      "output_esperado": "tabla_filtrada",
+      "respuesta_tipo": "tabla",
+      "uso_tipico": "Permite responder consultas del tipo 'muestra las ventas del mes de marzo en Santiago'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "filtrar datos"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_filtrar_tabla_generica"
+    },
+    "resumir_datos": {
+      "descripcion": "Genera totales, promedios o conteos genéricos para cualquier tabla y campo.",
+      "input_requerido": [
+        "tabla",
+        "campo",
+        "operacion"
+      ],
+      "funcion_python": "resumir_tabla_generica",
+      "fuente_datos": "variable",
+      "output_esperado": "valor_resumen",
+      "respuesta_tipo": "texto",
+      "uso_tipico": "Consultas como 'cuántos clientes tenemos en total' o 'cuál es el promedio de precios'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "resumir datos"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_resumir_tabla_generica"
+    },
+    "comparar_indicadores": {
+      "descripcion": "Permite comparar dos métricas o períodos distintos (ventas vs compras, este mes vs anterior, etc.).",
+      "input_requerido": [
+        "indicador_1",
+        "indicador_2",
+        "periodo_1",
+        "periodo_2"
+      ],
+      "funcion_python": "comparar_metricas",
+      "fuente_datos": [
+        "ventas",
+        "compras"
+      ],
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "uso_tipico": "Consultas como 'compara ventas y compras del último trimestre'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "comparar indicadores"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_comparar_metricas"
+    },
+    "generar_resumen_global": {
+      "descripcion": "Compone un resumen general del negocio con los principales indicadores (ventas, compras, margen, stock).",
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "funcion_python": "generar_dashboard_resumen",
+      "fuente_datos": [
+        "ventas",
+        "compras",
+        "productos"
+      ],
+      "output_esperado": [
+        "tabla",
+        "texto"
+      ],
+      "respuesta_tipo": "tabla+texto",
+      "uso_tipico": "Consultas tipo 'dame un resumen general del trimestre'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "generar resumen global"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_generar_dashboard_resumen"
+    },
+    "analizar_tendencias": {
+      "descripcion": "Detecta patrones de aumento o disminución en ventas, compras o stock a lo largo del tiempo.",
+      "input_requerido": [
+        "tabla",
+        "campo_tiempo",
+        "campo_valor"
+      ],
+      "funcion_python": "detectar_tendencias",
+      "fuente_datos": "variable",
+      "output_esperado": [
+        "grafico_linea",
+        "texto"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "uso_tipico": "Consultas como 'hay tendencia a la baja en ventas'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar tendencias"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_detectar_tendencias"
+    },
+    "respuesta_fallback": {
+      "descripcion": "Gestiona casos fuera del alcance del diccionario o sin coincidencia semántica.",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "gestion",
+      "palabras_clave": [
+        "no definida",
+        "no reconocida",
+        "desconocida"
+      ],
+      "input_requerido": [
+        "pregunta_original"
+      ],
+      "funcion_python": "gestionar_fallback",
+      "fuente_datos": null,
+      "output_esperado": "mensaje_clarificacion",
+      "respuesta_tipo": "texto",
+      "uso_tipico": "Cuando el usuario hace preguntas fuera del catálogo o ambiguas.",
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_gestionar_fallback"
+    },
+    "confirmar_parametros": {
+      "descripcion": "Verifica si el usuario entregó todos los parámetros necesarios (por ejemplo, período o producto) antes de ejecutar una acción.",
+      "input_requerido": [
+        "parametros_esperados",
+        "pregunta_usuario"
+      ],
+      "funcion_python": "verificar_parametros",
+      "fuente_datos": null,
+      "output_esperado": "estado_confirmacion",
+      "respuesta_tipo": "texto",
+      "uso_tipico": "Cuando el usuario pregunta 'cuánto vendimos' sin indicar el período.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "confirmar parametros"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_verificar_parametros"
+    },
+    "combinar_resultados": {
+      "descripcion": "Permite combinar los resultados de dos acciones distintas para responder preguntas compuestas.",
+      "input_requerido": [
+        "accion_1",
+        "accion_2"
+      ],
+      "funcion_python": "fusionar_resultados",
+      "fuente_datos": null,
+      "output_esperado": "respuesta_compuesta",
+      "respuesta_tipo": "texto+tabla",
+      "uso_tipico": "Consultas tipo 'muéstrame las ventas y el margen del trimestre'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "combinar resultados"
+      ],
+      "nivel_usuario": "operativo",
+      "webhook": "http://localhost:5678/webhook/fe_fusionar_resultados"
+    }
+  }
+}

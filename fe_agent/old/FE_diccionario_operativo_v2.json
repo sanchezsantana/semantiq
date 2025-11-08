@@ -1,0 +1,550 @@
+{
+  "acciones_operativas": {
+    "consultar_total_ventas": {
+      "descripcion": "Calcula el total de ventas realizadas en un período determinado.",
+      "preguntas_asociadas": [
+        1
+      ],
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_total_ventas",
+      "output_esperado": "valor_total",
+      "respuesta_tipo": "texto",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "consultar total ventas"
+      ]
+    },
+    "consultar_total_compras": {
+      "descripcion": "Calcula el total de compras realizadas a los proveedores en un período.",
+      "preguntas_asociadas": [
+        2
+      ],
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "compras"
+      ],
+      "funcion_python": "get_total_compras",
+      "output_esperado": "valor_total",
+      "respuesta_tipo": "texto",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "consultar total compras"
+      ]
+    },
+    "calcular_margen_global": {
+      "descripcion": "Compara ventas y compras totales para calcular el margen global del período.",
+      "preguntas_asociadas": [
+        3
+      ],
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "compras"
+      ],
+      "funcion_python": "get_margen_global",
+      "output_esperado": "tabla_resumen",
+      "respuesta_tipo": "tabla",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "calcular margen global"
+      ]
+    },
+    "obtener_top_productos_vendidos": {
+      "descripcion": "Identifica los productos más vendidos en el período y calcula la rotación.",
+      "preguntas_asociadas": [
+        4,
+        20
+      ],
+      "input_requerido": [
+        "n_top"
+      ],
+      "fuente_datos": [
+        "detalle_ventas",
+        "productos"
+      ],
+      "funcion_python": "get_top_productos_vendidos",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "obtener top productos vendidos"
+      ]
+    },
+    "obtener_producto_max_ingreso": {
+      "descripcion": "Identifica el producto con mayor ingreso total.",
+      "preguntas_asociadas": [
+        5
+      ],
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "fuente_datos": [
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_producto_max_ingreso",
+      "output_esperado": "producto_y_valor",
+      "respuesta_tipo": "texto",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "obtener producto max ingreso"
+      ]
+    },
+    "obtener_top_clientes": {
+      "descripcion": "Lista los clientes con mayores compras durante el período.",
+      "preguntas_asociadas": [
+        6
+      ],
+      "input_requerido": [
+        "n_top"
+      ],
+      "fuente_datos": [
+        "ventas",
+        "clientes"
+      ],
+      "funcion_python": "get_top_clientes",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "obtener top clientes"
+      ]
+    },
+    "obtener_top_proveedores": {
+      "descripcion": "Muestra los proveedores con mayor volumen de compras.",
+      "preguntas_asociadas": [
+        7
+      ],
+      "input_requerido": [
+        "n_top"
+      ],
+      "fuente_datos": [
+        "compras",
+        "proveedores"
+      ],
+      "funcion_python": "get_top_proveedores",
+      "output_esperado": [
+        "tabla",
+        "grafico_pie"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "obtener top proveedores"
+      ]
+    },
+    "analizar_ventas_mensuales": {
+      "descripcion": "Analiza el comportamiento de las ventas mes a mes.",
+      "preguntas_asociadas": [
+        8
+      ],
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_ventas_mensuales",
+      "output_esperado": [
+        "tabla",
+        "grafico_linea"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar ventas mensuales"
+      ]
+    },
+    "comparar_unidades_compradas_vendidas": {
+      "descripcion": "Compara las unidades compradas y vendidas de cada producto para detectar diferencias de stock.",
+      "preguntas_asociadas": [
+        9
+      ],
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_compras",
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_diferencia_unidades",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "comparar unidades compradas vendidas"
+      ]
+    },
+    "consultar_stock_actual": {
+      "descripcion": "Muestra el stock actual y el valor del inventario.",
+      "preguntas_asociadas": [
+        10,
+        18,
+        19
+      ],
+      "input_requerido": [],
+      "fuente_datos": [
+        "productos",
+        "detalle_compras",
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_stock_actual",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "consulta",
+      "palabras_clave": [
+        "consultar stock actual"
+      ]
+    },
+    "calcular_margen_por_producto": {
+      "descripcion": "Calcula el margen promedio por producto considerando precios de compra y venta.",
+      "preguntas_asociadas": [
+        11
+      ],
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_compras",
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_margen_por_producto",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "calcular margen por producto"
+      ]
+    },
+    "analizar_clientes_por_ciudad": {
+      "descripcion": "Analiza la distribución geográfica de los clientes y sus ventas totales.",
+      "preguntas_asociadas": [
+        12
+      ],
+      "input_requerido": [],
+      "fuente_datos": [
+        "clientes",
+        "ventas"
+      ],
+      "funcion_python": "get_clientes_por_ciudad",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar clientes por ciudad"
+      ]
+    },
+    "analizar_tipo_cliente": {
+      "descripcion": "Agrupa las ventas según el tipo de cliente (Particular, Empresa, Comercio).",
+      "preguntas_asociadas": [
+        13
+      ],
+      "input_requerido": [],
+      "fuente_datos": [
+        "clientes",
+        "ventas"
+      ],
+      "funcion_python": "get_ventas_por_tipo_cliente",
+      "output_esperado": [
+        "tabla",
+        "grafico_pie"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar tipo cliente"
+      ]
+    },
+    "analizar_ventas_por_dia": {
+      "descripcion": "Analiza las ventas por día para detectar los días con mayor movimiento.",
+      "preguntas_asociadas": [
+        14
+      ],
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_ventas_por_dia",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar ventas por dia"
+      ]
+    },
+    "analizar_diversidad_productos": {
+      "descripcion": "Mide la cantidad de productos distintos vendidos por mes.",
+      "preguntas_asociadas": [
+        15
+      ],
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "detalle_ventas"
+      ],
+      "funcion_python": "get_diversidad_productos",
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar diversidad productos"
+      ]
+    },
+    "calcular_ticket_promedio": {
+      "descripcion": "Calcula el ticket promedio mensual.",
+      "preguntas_asociadas": [
+        16
+      ],
+      "input_requerido": [
+        "rango_fechas"
+      ],
+      "fuente_datos": [
+        "ventas"
+      ],
+      "funcion_python": "get_ticket_promedio",
+      "output_esperado": "tabla",
+      "respuesta_tipo": "tabla",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "calcular ticket promedio"
+      ]
+    },
+    "identificar_clientes_inactivos": {
+      "descripcion": "Identifica los clientes que no han realizado compras en los últimos meses.",
+      "preguntas_asociadas": [
+        17
+      ],
+      "input_requerido": [
+        "meses_inactividad"
+      ],
+      "fuente_datos": [
+        "clientes",
+        "ventas"
+      ],
+      "funcion_python": "get_clientes_inactivos",
+      "output_esperado": "tabla",
+      "respuesta_tipo": "tabla",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "identificar clientes inactivos"
+      ]
+    }
+  },
+  "acciones_genericas": {
+    "filtrar_datos": {
+      "descripcion": "Aplica filtros dinámicos a cualquier tabla del sistema según campos, valores o condiciones provistas por el usuario.",
+      "input_requerido": [
+        "tabla",
+        "campo",
+        "condicion",
+        "valor"
+      ],
+      "funcion_python": "filtrar_tabla_generica",
+      "fuente_datos": "variable",
+      "output_esperado": "tabla_filtrada",
+      "respuesta_tipo": "tabla",
+      "uso_tipico": "Permite responder consultas del tipo 'muestra las ventas del mes de marzo en Santiago'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "filtrar datos"
+      ]
+    },
+    "resumir_datos": {
+      "descripcion": "Genera totales, promedios o conteos genéricos para cualquier tabla y campo.",
+      "input_requerido": [
+        "tabla",
+        "campo",
+        "operacion"
+      ],
+      "funcion_python": "resumir_tabla_generica",
+      "fuente_datos": "variable",
+      "output_esperado": "valor_resumen",
+      "respuesta_tipo": "texto",
+      "uso_tipico": "Consultas como 'cuántos clientes tenemos en total' o 'cuál es el promedio de precios'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "resumir datos"
+      ]
+    },
+    "comparar_indicadores": {
+      "descripcion": "Permite comparar dos métricas o períodos distintos (ventas vs compras, este mes vs anterior, etc.).",
+      "input_requerido": [
+        "indicador_1",
+        "indicador_2",
+        "periodo_1",
+        "periodo_2"
+      ],
+      "funcion_python": "comparar_metricas",
+      "fuente_datos": [
+        "ventas",
+        "compras"
+      ],
+      "output_esperado": [
+        "tabla",
+        "grafico_barras"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "uso_tipico": "Consultas como 'compara ventas y compras del último trimestre'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "comparar indicadores"
+      ]
+    },
+    "generar_resumen_global": {
+      "descripcion": "Compone un resumen general del negocio con los principales indicadores (ventas, compras, margen, stock).",
+      "input_requerido": [
+        "fecha_inicio",
+        "fecha_fin"
+      ],
+      "funcion_python": "generar_dashboard_resumen",
+      "fuente_datos": [
+        "ventas",
+        "compras",
+        "productos"
+      ],
+      "output_esperado": [
+        "tabla",
+        "texto"
+      ],
+      "respuesta_tipo": "tabla+texto",
+      "uso_tipico": "Consultas tipo 'dame un resumen general del trimestre'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "generar resumen global"
+      ]
+    },
+    "analizar_tendencias": {
+      "descripcion": "Detecta patrones de aumento o disminución en ventas, compras o stock a lo largo del tiempo.",
+      "input_requerido": [
+        "tabla",
+        "campo_tiempo",
+        "campo_valor"
+      ],
+      "funcion_python": "detectar_tendencias",
+      "fuente_datos": "variable",
+      "output_esperado": [
+        "grafico_linea",
+        "texto"
+      ],
+      "respuesta_tipo": "tabla+grafico",
+      "uso_tipico": "Consultas como 'hay tendencia a la baja en ventas'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "analizar tendencias"
+      ]
+    },
+    "respuesta_fallback": {
+      "descripcion": "Gestiona casos fuera del alcance del diccionario o sin coincidencia semántica.",
+      "nivel_procesamiento": "menor",
+      "tipo_accion": "gestion",
+      "palabras_clave": [
+        "no definida",
+        "no reconocida",
+        "desconocida"
+      ],
+      "input_requerido": [
+        "pregunta_original"
+      ],
+      "funcion_python": "gestionar_fallback",
+      "fuente_datos": null,
+      "output_esperado": "mensaje_clarificacion",
+      "respuesta_tipo": "texto",
+      "uso_tipico": "Cuando el usuario hace preguntas fuera del catálogo o ambiguas."
+    },
+    "confirmar_parametros": {
+      "descripcion": "Verifica si el usuario entregó todos los parámetros necesarios (por ejemplo, período o producto) antes de ejecutar una acción.",
+      "input_requerido": [
+        "parametros_esperados",
+        "pregunta_usuario"
+      ],
+      "funcion_python": "verificar_parametros",
+      "fuente_datos": null,
+      "output_esperado": "estado_confirmacion",
+      "respuesta_tipo": "texto",
+      "uso_tipico": "Cuando el usuario pregunta 'cuánto vendimos' sin indicar el período.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "confirmar parametros"
+      ]
+    },
+    "combinar_resultados": {
+      "descripcion": "Permite combinar los resultados de dos acciones distintas para responder preguntas compuestas.",
+      "input_requerido": [
+        "accion_1",
+        "accion_2"
+      ],
+      "funcion_python": "fusionar_resultados",
+      "fuente_datos": null,
+      "output_esperado": "respuesta_compuesta",
+      "respuesta_tipo": "texto+tabla",
+      "uso_tipico": "Consultas tipo 'muéstrame las ventas y el margen del trimestre'.",
+      "nivel_procesamiento": "mayor",
+      "tipo_accion": "analisis",
+      "palabras_clave": [
+        "combinar resultados"
+      ]
+    }
+  }
+}

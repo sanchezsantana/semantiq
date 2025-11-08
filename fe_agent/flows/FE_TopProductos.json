@@ -1,0 +1,74 @@
+{
+  "name": "FE_TopProductos",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fe_top_productos",
+        "responseMode": "responseNode"
+      },
+      "id": "Webhook_FE_TopProductos",
+      "name": "Webhook FE_TopProductos",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "language": "javascript",
+        "jsCode": "return [{\n  json: {\n    ok: true,\n    accion: \"listar_productos_destacados\",\n    periodo: \"2025-10\",\n    productos: [\n      { nombre: \"Martillo Carpintero\", ventas: 180 },\n      { nombre: \"Taladro Bosch\", ventas: 150 },\n      { nombre: \"Sierra Circular\", ventas: 120 },\n      { nombre: \"Cemento Holcim 25kg\", ventas: 110 },\n      { nombre: \"Broca 6mm\", ventas: 95 }\n    ],\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "Code_FE_TopProductos",
+      "name": "Code FE_TopProductos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {},
+      "id": "Respond_FE_TopProductos",
+      "name": "Respond to Webhook FE_TopProductos",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Webhook_FE_TopProductos": {
+      "main": [
+        [
+          {
+            "node": "Code FE_TopProductos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code_FE_TopProductos": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook FE_TopProductos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": "FE_TopProductos_001",
+  "versionId": "1",
+  "meta": {
+    "template": "Semantiq_FE",
+    "description": "Workflow base para endpoint /fe_top_productos (usado para gráficos en Streamlit)",
+    "created": "2025-11-03T01:05:00.000Z"
+  },
+  "tags": [
+    {
+      "name": "Semantiq_FE"
+    }
+  ]
+}

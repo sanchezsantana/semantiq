@@ -1,0 +1,48 @@
+{
+  "version": "v1.0",
+  "generated_at": "2025-10-29T02:12:07.159252Z",
+  "descripcion": "Mapa completo de rutas n8n para el agente FE basado en el diccionario operativo v4.",
+  "acciones_operativas": {
+    "consultar_total_ventas": "http://localhost:5678/webhook/fe_total_ventas",
+    "consultar_total_compras": "http://localhost:5678/webhook/fe_total_compras",
+    "calcular_margen_global": "http://localhost:5678/webhook/fe_margen_global",
+    "obtener_top_productos_vendidos": "http://localhost:5678/webhook/fe_top_productos_vendidos",
+    "obtener_producto_max_ingreso": "http://localhost:5678/webhook/fe_producto_max_ingreso",
+    "obtener_top_clientes": "http://localhost:5678/webhook/fe_top_clientes",
+    "obtener_top_proveedores": "http://localhost:5678/webhook/fe_top_proveedores",
+    "analizar_ventas_mensuales": "http://localhost:5678/webhook/fe_ventas_mensuales",
+    "comparar_unidades_compradas_vendidas": "http://localhost:5678/webhook/fe_diferencia_unidades",
+    "consultar_stock_actual": "http://localhost:5678/webhook/fe_stock_actual",
+    "calcular_margen_por_producto": "http://localhost:5678/webhook/fe_margen_por_producto",
+    "analizar_clientes_por_ciudad": "http://localhost:5678/webhook/fe_clientes_por_ciudad",
+    "analizar_tipo_cliente": "http://localhost:5678/webhook/fe_ventas_por_tipo_cliente",
+    "analizar_ventas_por_dia": "http://localhost:5678/webhook/fe_ventas_por_dia",
+    "analizar_diversidad_productos": "http://localhost:5678/webhook/fe_diversidad_productos",
+    "calcular_ticket_promedio": "http://localhost:5678/webhook/fe_ticket_promedio",
+    "identificar_clientes_inactivos": "http://localhost:5678/webhook/fe_clientes_inactivos"
+  },
+  "acciones_gerenciales": {
+    "calcular_margen_global_trimestral": "http://localhost:5678/webhook/fe_margen_global_trimestral",
+    "comparar_ventas_trimestres": "http://localhost:5678/webhook/fe_comparar_ventas_trimestres",
+    "analizar_tendencia_ventas_anual": "http://localhost:5678/webhook/fe_tendencia_ventas_anual",
+    "analizar_rentabilidad_por_categoria": "http://localhost:5678/webhook/fe_margen_por_categoria",
+    "evaluar_rotacion_inventario": "http://localhost:5678/webhook/fe_rotacion_inventario",
+    "detectar_productos_inmovilizados": "http://localhost:5678/webhook/fe_productos_inmovilizados",
+    "clientes_estrategicos": "http://localhost:5678/webhook/fe_clientes_estrategicos",
+    "clientes_en_riesgo": "http://localhost:5678/webhook/fe_clientes_en_riesgo",
+    "proveedores_mas_confiables": "http://localhost:5678/webhook/fe_proveedores_confiables",
+    "analizar_concentracion_proveedores": "http://localhost:5678/webhook/fe_concentracion_proveedores",
+    "analizar_tendencia_margen": "http://localhost:5678/webhook/fe_tendencia_margen",
+    "generar_resumen_ejecutivo": "http://localhost:5678/webhook/fe_resumen_ejecutivo"
+  },
+  "acciones_genericas": {
+    "filtrar_datos": "http://localhost:5678/webhook/fe_filtrar_tabla_generica",
+    "resumir_datos": "http://localhost:5678/webhook/fe_resumir_tabla_generica",
+    "comparar_indicadores": "http://localhost:5678/webhook/fe_comparar_metricas",
+    "generar_resumen_global": "http://localhost:5678/webhook/fe_generar_dashboard_resumen",
+    "analizar_tendencias": "http://localhost:5678/webhook/fe_detectar_tendencias",
+    "respuesta_fallback": "http://localhost:5678/webhook/fe_gestionar_fallback",
+    "confirmar_parametros": "http://localhost:5678/webhook/fe_verificar_parametros",
+    "combinar_resultados": "http://localhost:5678/webhook/fe_fusionar_resultados"
+  }
+}

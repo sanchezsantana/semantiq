@@ -1,0 +1,11 @@
+id_cliente,nombre_cliente,tipo_cliente,telefono,ciudad
+CL001,Constructora SolSur,Empresa,+56 9 22223333,Santiago
+CL002,Juan Pérez,Particular,+56 9 11112222,Rancagua
+CL003,Ferretería El Clavo,Comercio,+56 9 33334444,Valdivia
+CL004,Constructora Andina,Empresa,+56 9 55556666,Concepción
+CL005,María López,Particular,+56 9 44445555,Santiago
+CL006,Servicios Mantenimiento Norte,Empresa,+56 9 77778888,Antofagasta
+CL007,Obras y Montajes Sur,Empresa,+56 9 99990000,Temuco
+CL008,Pedro González,Particular,+56 9 88889999,Viña del Mar
+CL009,Depósito Central,Comercio,+56 9 12121212,Santiago
+CL010,Hogar & Taller,Comercio,+56 9 34343434,La Serena

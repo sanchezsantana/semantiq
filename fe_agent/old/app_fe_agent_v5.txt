@@ -1,0 +1,340 @@
+# ============================================================
+#  app_fe_agent_v5.py
+#  Versión 5 (pre-integración real: n8n + Ollama)
+#  Autor: Eduardo Sánchez Santana
+#  Fecha: 2025-10-28
+# ============================================================
+
+import streamlit as st
+import json
+import os
+import time
+from datetime import datetime
+
+import pandas as pd  # Para tablas y opción de gráficos
+
+# ------------------------------------------------------------
+#  Importación de módulos del núcleo
+# ------------------------------------------------------------
+from core.ambiguity_manager import AmbiguityManager
+from core.llm_interpreter_conceptos_v2 import LLMInterpreter
+from core.language_generator import LanguageGenerator
+from core.n8n_connector_v2 import N8NConnector
+from core.context_manager import ContextManager
+from core.fallback_manager import FallbackManager
+
+# ------------------------------------------------------------
+#  UTILIDADES INTERNAS
+# ------------------------------------------------------------
+
+SESSION_LOG_PATH = "data/session_log.json"
+ACTION_ROUTER_PATH = "data/FE_action_router.json"
+
+def _safe_context_load(cm: ContextManager, path: str = SESSION_LOG_PATH):
+    """Carga persistencia si el ContextManager ya implementa load_to_file; si no, lo emula."""
+    try:
+        if hasattr(cm, "load_from_file"):
+            cm.load_from_file(path)
+        else:
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    snapshot = json.load(f)
+                cm.context = snapshot.get("context", {})
+    except Exception as e:
+        print(f"[v5] Warning al cargar contexto: {e}")
+
+def _safe_context_save(cm: ContextManager, path: str = SESSION_LOG_PATH):
+    """Guarda persistencia si el ContextManager ya implementa save_to_file; si no, lo emula."""
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        if hasattr(cm, "save_to_file"):
+            cm.save_to_file(path)
+        else:
+            snapshot = {"timestamp": datetime.now().isoformat(), "context": cm.context}
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(snapshot, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"[v5] Warning al guardar contexto: {e}")
+
+def _schema_ok(resp: dict) -> bool:
+    """Validación mínima de esquema esperado desde n8n."""
+    if not isinstance(resp, dict):
+        return False
+    if "ok" not in resp:
+        return False
+    if resp.get("ok") is True and "data" not in resp:
+        return False
+    return True
+
+def _execute_n8n_with_retries(conn: N8NConnector, accion: str, parametros: dict, retries: int = 3, delay_s: float = 1.0):
+    """Llama a n8n con reintentos y validación de esquema."""
+    last_error = None
+    for intento in range(1, retries + 1):
+        try:
+            st.chat_message("assistant").write(f"Intento {intento}/{retries} ejecutando **{accion}**…")
+            resp = conn.execute(accion, parametros)
+            if _schema_ok(resp):
+                return resp
+            else:
+                last_error = ValueError("Esquema inválido en respuesta de n8n.")
+        except Exception as e:
+            last_error = e
+        if intento < retries:
+            time.sleep(delay_s)
+    # Si llega aquí, hubo fallo definitivo
+    return {"ok": False, "error": str(last_error) if last_error else "Fallo desconocido"}
+
+def _generate_text_with_templates(lg: LanguageGenerator, accion: str, data: dict) -> dict:
+    """
+    Usa LanguageGenerator si tiene 'generar_respuesta'.
+    Si no provee una plantilla específica, aplica una de fallback básica por categoría.
+    """
+    # 1) Ruta principal: usar el método oficial del módulo si existe
+    if hasattr(lg, "generar_respuesta"):
+        try:
+            out = lg.generar_respuesta(accion, data)
+            if isinstance(out, dict) and "texto" in out:
+                return out
+        except Exception as e:
+            print(f"[v5] Warning en LanguageGenerator.generar_respuesta: {e}")
+
+    # 2) Fallback por categorías simples (plantillas básicas)
+    texto = "Acción completada."
+    accion_l = (accion or "").lower()
+    if "margen" in accion_l:
+        valor = data.get("valor") or data.get("margen") or "N/D"
+        ventas = data.get("ventas") or data.get("total_ventas") or "N/D"
+        texto = f"Margen global del período: {valor}%, sobre ventas totales de {ventas}."
+    elif "ventas" in accion_l:
+        total = data.get("total") or data.get("total_ventas") or "N/D"
+        texto = f"Ventas totales del período: {total}."
+    elif "clientes" in accion_l:
+        tabla = data.get("tabla") or []
+        texto = f"Se identificaron {len(tabla)} clientes en el período consultado."
+    elif "productos" in accion_l:
+        texto = "Se listan los productos más relevantes del período consultado."
+    elif "proveedores" in accion_l:
+        texto = "Se listan los principales proveedores por gasto o volumen."
+    else:
+        texto = "La acción se ejecutó correctamente."
+
+    return {"texto": texto}
+
+# ------------------------------------------------------------
+#  CONFIGURACIÓN DE PÁGINA
+# ------------------------------------------------------------
+st.set_page_config(page_title="Agente FE - Ferretería Inteligente", layout="wide")
+st.title("Agente FE - Ferretería Inteligente (v5)")
+st.caption("Versión preparada para integración real (n8n + Ollama). Incluye fallback/ambigüedad fusionados, reintentos n8n, persistencia y gráficos bajo confirmación.")
+
+# ------------------------------------------------------------
+#  INICIALIZACIÓN DE SESIÓN
+# ------------------------------------------------------------
+if "initialized" not in st.session_state:
+    st.session_state.initialized = True
+    st.session_state.chat_history = []
+
+    st.session_state.ambiguity_manager = AmbiguityManager()
+    st.session_state.llm_interpreter = LLMInterpreter()
+    st.session_state.language_generator = LanguageGenerator()
+    st.session_state.n8n_connector = N8NConnector(ACTION_ROUTER_PATH)
+    st.session_state.context_manager = ContextManager()
+    st.session_state.fallback_manager = FallbackManager()
+
+    # Carga de memoria persistente (si existe)
+    _safe_context_load(st.session_state.context_manager, SESSION_LOG_PATH)
+
+    st.toast("Agente FE inicializado correctamente.")
+
+# ------------------------------------------------------------
+#  SIDEBAR (control, historial, logs, debug)
+# ------------------------------------------------------------
+with st.sidebar:
+    st.markdown("### Opciones del agente")
+
+    if st.button("Limpiar conversación y contexto"):
+        st.session_state.chat_history = []
+        st.session_state.context_manager.clear()
+        st.session_state.fallback_manager.limpiar_log()
+        # Limpia también el archivo de sesión si existe
+        if os.path.exists(SESSION_LOG_PATH):
+            try:
+                open(SESSION_LOG_PATH, "w", encoding="utf-8").close()
+            except:
+                pass
+        st.success("Conversación, contexto y logs reiniciados.")
+
+    debug_mode = st.checkbox("Activar modo debug", value=False)
+
+    st.markdown("### Historial reciente")
+    if st.session_state.chat_history:
+        for msg in st.session_state.chat_history[-10:]:
+            if msg["role"] == "user":
+                st.write(f"• [Usuario] {msg['content']}")
+            else:
+                st.write(f"• [Agente] {msg['content']}")
+    else:
+        st.caption("No hay mensajes recientes.")
+
+    st.markdown("### Fallbacks recientes")
+    logs = st.session_state.fallback_manager.leer_log(5)
+    if logs:
+        for item in logs:
+            tipo = item.get("tipo", "general").upper()
+            st.caption(f"{item['timestamp']} — {tipo}: {item['motivo']}")
+    else:
+        st.caption("Sin registros recientes de fallback.")
+
+    st.markdown("---")
+    st.caption(f"Versión: v5 | Última actualización: {datetime.now().strftime('%d-%m-%Y %H:%M')}")
+
+# ------------------------------------------------------------
+#  UI PRINCIPAL TIPO CHAT
+# ------------------------------------------------------------
+st.markdown("---")
+st.markdown("### Interactúa con el agente")
+
+user_input = st.chat_input("Ejemplo: '¿Cuáles fueron los productos más vendidos este mes?'")
+
+if user_input:
+    # Guardar turno de usuario
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+    st.chat_message("user").write(user_input)
+
+    # 1) Fusión Ambiguity ↔ Fallback (no cortar conversación)
+    am = st.session_state.ambiguity_manager
+    ambiguity_result = am.procesar_input(user_input)
+
+    if ambiguity_result.get("requiere_clarificacion"):
+        fb = st.session_state.fallback_manager
+        fb_resp = fb.handle(
+            user_input,
+            motivo="Ambigüedad detectada",
+            tipo="ambiguous"
+        )
+        # Mensaje de aclaración + apoyo de fallback
+        st.chat_message("assistant").warning(
+            f"{ambiguity_result.get('mensaje', 'La consulta es ambigua.')} {fb_resp['texto']}"
+        )
+        # Registrar “clarificación pendiente”
+        st.session_state.context_manager.update(
+            key="clarificacion_pendiente",
+            value=ambiguity_result.get("mensaje", "")
+        )
+        _safe_context_save(st.session_state.context_manager, SESSION_LOG_PATH)
+        st.stop()
+
+    # 2) Interpretación con LLM (Ollama/Gemma 2B en la integración real)
+    st.chat_message("assistant").write("Analizando tu consulta…")
+    llm = st.session_state.llm_interpreter
+    parsed = llm.interpret(ambiguity_result.get("mensaje", user_input))
+
+    if debug_mode:
+        with st.expander("JSON interpretado por LLM"):
+            st.json(parsed)
+
+    accion = (parsed or {}).get("accion")
+    parametros = (parsed or {}).get("parametros", {})
+
+    # Fallback si el LLM no reconoce acción
+    if not accion:
+        fb = st.session_state.fallback_manager
+        resp = fb.handle(
+            user_input,
+            "Sin acción detectada por el LLM",
+            tipo="llm"
+        )
+        st.chat_message("assistant").warning(resp["texto"])
+        st.session_state.context_manager.update(
+            key="ultima_respuesta",
+            value=resp["texto"],
+            metadata=resp
+        )
+        _safe_context_save(st.session_state.context_manager, SESSION_LOG_PATH)
+        st.stop()
+
+    # 3) Ejecución en n8n con reintentos + validación de esquema
+    st.chat_message("assistant").write(f"Ejecutando acción: **{accion}**")
+    response = _execute_n8n_with_retries(
+        conn=st.session_state.n8n_connector,
+        accion=accion,
+        parametros=parametros,
+        retries=3,
+        delay_s=1.0
+    )
+
+    if not response.get("ok"):
+        fb = st.session_state.fallback_manager
+        resp = fb.handle(
+            user_input,
+            response.get("error", "Error desconocido en n8n"),
+            tipo="n8n",
+            accion=accion,
+            parametros=parametros
+        )
+        st.chat_message("assistant").error(resp["texto"])
+        st.session_state.context_manager.update(
+            key="ultima_respuesta",
+            value=resp["texto"],
+            metadata=resp
+        )
+        _safe_context_save(st.session_state.context_manager, SESSION_LOG_PATH)
+        st.stop()
+
+    # 4) Procesamiento de resultados con plantillas diferenciadas
+    data = response.get("data", {}) or {}
+    lg = st.session_state.language_generator
+    resumen = _generate_text_with_templates(lg, accion, data)
+
+    # Mensaje principal
+    st.chat_message("assistant").write(resumen.get("texto", "Acción completada."))
+
+    # 5) Visualización: primero tabla, luego ofrecer gráfico bajo confirmación
+    df_to_plot = None
+    if isinstance(data, dict) and "tabla" in data and isinstance(data["tabla"], (list, tuple)):
+        try:
+            df_to_plot = pd.DataFrame(data["tabla"])
+            st.dataframe(df_to_plot, use_container_width=True)
+        except Exception as e:
+            st.warning(f"No fue posible mostrar la tabla: {e}")
+
+    # Oferta de gráfico bajo confirmación del usuario
+    if df_to_plot is not None and not df_to_plot.empty:
+        if st.button("Mostrar gráfico de esta tabla"):
+            try:
+                # Heurística: usar la primera columna como índice si es no numérica
+                if not pd.api.types.is_numeric_dtype(df_to_plot.iloc[:, 0]):
+                    df_plot = df_to_plot.set_index(df_to_plot.columns[0])
+                else:
+                    df_plot = df_to_plot.copy()
+                st.bar_chart(df_plot)
+            except Exception as e:
+                st.warning(f"No fue posible graficar: {e}")
+
+    # Guardar en contexto
+    st.session_state.context_manager.update(
+        key="ultima_respuesta",
+        value=resumen.get("texto", ""),
+        metadata={"accion": accion, "parametros": parametros}
+    )
+    _safe_context_save(st.session_state.context_manager, SESSION_LOG_PATH)
+
+# ------------------------------------------------------------
+#  MODO DEBUG (DETALLES DE SESIÓN)
+# ------------------------------------------------------------
+if 'debug_mode' in locals() and debug_mode:
+    st.markdown("---")
+    st.markdown("### Depuración activa")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Context Manager")
+        try:
+            st.json(st.session_state.context_manager.context)
+        except Exception as e:
+            st.write(f"No se pudo mostrar el contexto: {e}")
+    with col2:
+        st.subheader("Últimos fallbacks")
+        try:
+            st.json(st.session_state.fallback_manager.leer_log(5))
+        except Exception as e:
+            st.write(f"No se pudo leer el log: {e}")

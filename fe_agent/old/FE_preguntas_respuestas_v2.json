@@ -1,0 +1,149 @@
+{
+  "descripcion": "Preguntas y respuestas base para el Agente FE. Cada entrada asocia una pregunta natural con la acción operativa correspondiente, sus posibles sinónimos y el tipo de visualización sugerida. Diseñado para fortalecer el aprendizaje contextual en el finetuning simulado del LLM.",
+  "version": "v2",
+  "preguntas_respuestas": [
+    {
+      "id": 1,
+      "pregunta": "¿Cuál fue el total de ventas del trimestre?",
+      "sinonimos": ["muéstrame la facturación total", "ver ingresos trimestrales", "ventas totales del período"],
+      "accion": "consultar_total_ventas",
+      "parametros": {"periodo": "2025-Q1"},
+      "visualizacion_sugerida": "Gráfico de columnas",
+      "visualizaciones_posibles": ["barras", "columnas"],
+      "respuesta_ejemplo": "El total de ventas durante el primer trimestre de 2025 fue de $45.200.",
+      "tono": "informativo"
+    },
+    {
+      "id": 2,
+      "pregunta": "¿Cuál fue el margen global del trimestre?",
+      "sinonimos": ["cuál fue la utilidad del trimestre", "rentabilidad global", "beneficio total"],
+      "accion": "consultar_margen_global",
+      "parametros": {"periodo": "2025-Q1"},
+      "visualizacion_sugerida": "Gráfico de barras",
+      "visualizaciones_posibles": ["barras", "columnas"],
+      "respuesta_ejemplo": "El margen global del trimestre fue de 28.3%, manteniéndose estable respecto al período anterior.",
+      "tono": "analítico"
+    },
+    {
+      "id": 3,
+      "pregunta": "¿Qué productos fueron los más vendidos?",
+      "sinonimos": ["productos con más salida", "artículos destacados en ventas", "top de ventas"],
+      "accion": "obtener_top_productos_vendidos",
+      "parametros": {"limite": 5},
+      "visualizacion_sugerida": "Gráfico de barras horizontales",
+      "visualizaciones_posibles": ["barras", "torta"],
+      "respuesta_ejemplo": "Los productos más vendidos fueron Martillo, Clavos y Brocas.",
+      "tono": "informativo"
+    },
+    {
+      "id": 4,
+      "pregunta": "¿Cómo ha sido la evolución de las ventas en el último trimestre?",
+      "sinonimos": ["tendencia de ventas", "evolución de la facturación", "variación mensual de ventas"],
+      "accion": "consultar_tendencia_ventas",
+      "parametros": {"periodo": "2025-Q1"},
+      "visualizacion_sugerida": "Gráfico de líneas",
+      "visualizaciones_posibles": ["líneas", "barras"],
+      "respuesta_ejemplo": "Las ventas muestran un crecimiento sostenido entre enero y marzo.",
+      "tono": "analítico"
+    },
+    {
+      "id": 5,
+      "pregunta": "Compara las ventas y las compras del trimestre.",
+      "sinonimos": ["relación compras ventas", "balance comercial", "comparativa de ingresos y gastos"],
+      "accion": "consultar_relacion_compras_ventas",
+      "parametros": {"periodo": "2025-Q1"},
+      "visualizacion_sugerida": "Gráfico de columnas comparativas",
+      "visualizaciones_posibles": ["columnas", "barras"],
+      "respuesta_ejemplo": "Las ventas alcanzaron $45.200 y las compras $32.600 durante el trimestre.",
+      "tono": "comparativo"
+    },
+    {
+      "id": 6,
+      "pregunta": "¿Qué categorías de productos generaron más ingresos?",
+      "sinonimos": ["categorías más rentables", "familias con mayor utilidad", "líneas más vendidas"],
+      "accion": "consultar_categorias_mas_rentables",
+      "parametros": {},
+      "visualizacion_sugerida": "Gráfico de torta",
+      "visualizaciones_posibles": ["torta", "barras"],
+      "respuesta_ejemplo": "Las categorías más rentables fueron Herramientas Eléctricas y Materiales de Construcción.",
+      "tono": "analítico"
+    },
+    {
+      "id": 7,
+      "pregunta": "¿Qué clientes realizaron más compras?",
+      "sinonimos": ["clientes principales", "mayores compradores", "clientes con mayor volumen de compras"],
+      "accion": "consultar_top_clientes",
+      "parametros": {},
+      "visualizacion_sugerida": "Gráfico de barras",
+      "visualizaciones_posibles": ["barras", "columnas"],
+      "respuesta_ejemplo": "Los clientes con más compras fueron Constructora Andes y Ferromaq Ltda.",
+      "tono": "informativo"
+    },
+    {
+      "id": 8,
+      "pregunta": "¿Cuáles fueron los clientes inactivos durante el último trimestre?",
+      "sinonimos": ["clientes sin compras", "clientes pasivos", "clientes dormidos"],
+      "accion": "consultar_clientes_inactivos",
+      "parametros": {"periodo": "2025-Q1"},
+      "visualizacion_sugerida": "Tabla simple",
+      "visualizaciones_posibles": ["tabla"],
+      "respuesta_ejemplo": "Los clientes inactivos fueron ConstruAndes Ltda. y Servicios FerroPro.",
+      "tono": "informativo"
+    },
+    {
+      "id": 9,
+      "pregunta": "¿Qué proveedores tuvieron mayor volumen de compras?",
+      "sinonimos": ["proveedores principales", "mayores proveedores", "proveedores con más ventas"],
+      "accion": "consultar_top_proveedores",
+      "parametros": {},
+      "visualizacion_sugerida": "Gráfico de barras",
+      "visualizaciones_posibles": ["barras", "columnas"],
+      "respuesta_ejemplo": "Aceros del Sur y Materiales ProChile fueron los principales proveedores del trimestre.",
+      "tono": "informativo"
+    },
+    {
+      "id": 10,
+      "pregunta": "¿Qué productos tienen menor rotación?",
+      "sinonimos": ["productos con baja salida", "artículos menos vendidos", "productos lentos en venta"],
+      "accion": "consultar_productos_baja_rotacion",
+      "parametros": {},
+      "visualizacion_sugerida": "Gráfico de barras",
+      "visualizaciones_posibles": ["barras", "columnas"],
+      "respuesta_ejemplo": "Los productos con menor rotación fueron Sierra y Llave Inglesa.",
+      "tono": "informativo"
+    },
+    {
+      "id": 11,
+      "pregunta": "¿Qué productos tienen más stock disponible?",
+      "sinonimos": ["productos con más inventario", "artículos más disponibles", "mayor cantidad en stock"],
+      "accion": "consultar_productos_mayor_stock",
+      "parametros": {},
+      "visualizacion_sugerida": "Gráfico de barras verticales",
+      "visualizaciones_posibles": ["barras", "columnas"],
+      "respuesta_ejemplo": "Los productos con más stock son Tornillos 1/4\" y Lijas Grano Fino.",
+      "tono": "informativo"
+    },
+    {
+      "id": 12,
+      "pregunta": "¿Qué productos son los más rentables?",
+      "sinonimos": ["productos con mayor utilidad", "productos con mejor margen", "productos con alta rentabilidad"],
+      "accion": "consultar_productos_mas_rentables",
+      "parametros": {},
+      "visualizacion_sugerida": "Gráfico de barras",
+      "visualizaciones_posibles": ["barras", "dispersión"],
+      "respuesta_ejemplo": "Los productos más rentables fueron Taladro 12V y Broca 6mm.",
+      "tono": "analítico"
+    },
+    {
+      "id": 13,
+      "pregunta": "¿Cómo evolucionaron las ganancias a lo largo del año?",
+      "sinonimos": ["tendencia de utilidades", "variación anual de beneficios", "evolución de ganancias"],
+      "accion": "consultar_tendencia_anual_ganancias",
+      "parametros": {"periodo": "2025"},
+      "visualizacion_sugerida": "Gráfico de líneas",
+      "visualizaciones_posibles": ["líneas", "barras"],
+      "respuesta_ejemplo": "Las ganancias se mantuvieron estables, con un leve aumento en el cuarto trimestre.",
+      "tono": "analítico"
+    }
+  ]
+}

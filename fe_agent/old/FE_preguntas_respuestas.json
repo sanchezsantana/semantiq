@@ -1,0 +1,226 @@
+[
+    {
+        "id": 1,
+        "pregunta": "¿Cuál fue el total de ventas durante el trimestre?",
+        "tipo_respuesta": "texto",
+        "descripcion_salida": "Una frase con el total de ventas en pesos chilenos y el período considerado.",
+        "ejemplo_respuesta": "El total de ventas entre enero y marzo de 2025 fue de aproximadamente $45.200, considerando las 150 transacciones registradas."
+    },
+    {
+        "id": 2,
+        "pregunta": "¿Cuál fue el total de compras realizadas a los proveedores durante el mismo período?",
+        "tipo_respuesta": "texto",
+        "descripcion_salida": "Frase con el monto total de compras y número de órdenes.",
+        "ejemplo_respuesta": "El total de compras a proveedores fue de aproximadamente $36.800 distribuidas en 27 órdenes de compra."
+    },
+    {
+        "id": 3,
+        "pregunta": "¿Cuál fue el margen de ganancia global del período?",
+        "tipo_respuesta": "tabla",
+        "descripcion_salida": "Tabla con totales de compras, ventas y margen global.",
+        "estructura_tabla": [
+            "Indicador",
+            "Valor"
+        ],
+        "ejemplo_respuesta": {
+            "Indicador": [
+                "Total Ventas",
+                "Total Compras",
+                "Margen Global"
+            ],
+            "Valor": [
+                "$45.200",
+                "$36.800",
+                "22.8%"
+            ]
+        }
+    },
+    {
+        "id": 4,
+        "pregunta": "¿Cuáles fueron los 5 productos más vendidos?",
+        "tipo_respuesta": "tabla+grafico",
+        "descripcion_salida": "Tabla con top 5 productos ordenados por unidades vendidas.",
+        "estructura_tabla": [
+            "Producto",
+            "Unidades Vendidas",
+            "Total en Ventas ($)"
+        ],
+        "descripcion_grafico": "Gráfico de barras horizontales mostrando las unidades vendidas por producto."
+    },
+    {
+        "id": 5,
+        "pregunta": "¿Qué producto generó más ingresos totales?",
+        "tipo_respuesta": "texto",
+        "descripcion_salida": "Frase indicando el producto con mayor ingreso total y su monto.",
+        "ejemplo_respuesta": "El producto con mayor ingreso total fue 'Taladro eléctrico 500W', con ventas acumuladas de $12.500."
+    },
+    {
+        "id": 6,
+        "pregunta": "¿Qué clientes compraron más durante el trimestre?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Cliente",
+            "Total de compras ($)",
+            "Número de transacciones"
+        ],
+        "descripcion_grafico": "Gráfico de barras horizontales con los 5 clientes con mayores compras."
+    },
+    {
+        "id": 7,
+        "pregunta": "¿Qué proveedores fueron los más importantes por volumen de compra?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Proveedor",
+            "Monto total comprado ($)",
+            "Órdenes de compra"
+        ],
+        "descripcion_grafico": "Gráfico circular mostrando la participación de cada proveedor."
+    },
+    {
+        "id": 8,
+        "pregunta": "¿Cómo se comportaron las ventas mes a mes?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Mes",
+            "Total de Ventas ($)",
+            "Número de Ventas"
+        ],
+        "descripcion_grafico": "Gráfico de línea temporal con el monto de ventas mensual."
+    },
+    {
+        "id": 9,
+        "pregunta": "¿Qué producto tuvo la mayor diferencia entre unidades compradas y vendidas?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Producto",
+            "Compradas",
+            "Vendidas",
+            "Diferencia"
+        ],
+        "descripcion_grafico": "Barras positivas/negativas mostrando exceso o déficit de stock."
+    },
+    {
+        "id": 10,
+        "pregunta": "¿Cuál es el stock actual por producto?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Producto",
+            "Stock Actual",
+            "Precio Unitario",
+            "Valor de Inventario ($)"
+        ],
+        "descripcion_grafico": "Barras horizontales mostrando el valor de inventario por producto."
+    },
+    {
+        "id": 11,
+        "pregunta": "¿Qué productos tuvieron margen de ganancia más alto?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Producto",
+            "Precio Compra Promedio",
+            "Precio Venta Promedio",
+            "Margen (%)"
+        ],
+        "descripcion_grafico": "Barras ordenadas por margen descendente."
+    },
+    {
+        "id": 12,
+        "pregunta": "¿Qué ciudades concentran la mayor cantidad de clientes?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Ciudad",
+            "Clientes",
+            "Ventas Totales ($)"
+        ],
+        "descripcion_grafico": "Mapa o gráfico de barras agrupadas por ciudad."
+    },
+    {
+        "id": 13,
+        "pregunta": "¿Qué tipo de cliente compra más?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Tipo Cliente",
+            "Ventas Totales ($)",
+            "% del Total"
+        ],
+        "descripcion_grafico": "Gráfico circular con participación de tipos de cliente."
+    },
+    {
+        "id": 14,
+        "pregunta": "¿Cuáles son los días con mayor cantidad de ventas?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Fecha",
+            "Ventas ($)",
+            "Transacciones"
+        ],
+        "descripcion_grafico": "Gráfico de línea o barras mostrando las ventas diarias."
+    },
+    {
+        "id": 15,
+        "pregunta": "¿Cuántos productos diferentes se vendieron por mes?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Mes",
+            "Productos Distintos Vendidos"
+        ],
+        "descripcion_grafico": "Gráfico de barras mostrando la diversidad de productos vendidos por mes."
+    },
+    {
+        "id": 16,
+        "pregunta": "¿Cuál fue el ticket promedio de venta?",
+        "tipo_respuesta": "tabla",
+        "estructura_tabla": [
+            "Mes",
+            "Ventas Totales ($)",
+            "Número de Ventas",
+            "Ticket Promedio ($)"
+        ],
+        "descripcion_salida": "Tabla con el ticket promedio mensual y un texto resumen."
+    },
+    {
+        "id": 17,
+        "pregunta": "¿Qué clientes no realizaron compras en los últimos dos meses?",
+        "tipo_respuesta": "tabla",
+        "estructura_tabla": [
+            "Cliente",
+            "Última Fecha de Compra"
+        ],
+        "descripcion_salida": "Tabla con clientes inactivos para segmentación."
+    },
+    {
+        "id": 18,
+        "pregunta": "¿Cuáles productos presentan bajo nivel de stock?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Producto",
+            "Stock Actual",
+            "Nivel Crítico (≤10 unidades)"
+        ],
+        "descripcion_grafico": "Barras rojas para alertar bajo stock."
+    },
+    {
+        "id": 19,
+        "pregunta": "¿Cuál es el valor monetario total del inventario actual?",
+        "tipo_respuesta": "texto+tabla",
+        "estructura_tabla": [
+            "Producto",
+            "Stock",
+            "Precio Unitario",
+            "Valor de Inventario ($)"
+        ],
+        "descripcion_salida": "Texto con el valor total y tabla de detalle."
+    },
+    {
+        "id": 20,
+        "pregunta": "¿Cuál fue el producto con la mayor rotación (ventas / stock disponible)?",
+        "tipo_respuesta": "tabla+grafico",
+        "estructura_tabla": [
+            "Producto",
+            "Ventas Totales (unid.)",
+            "Stock Final",
+            "Ratio Rotación"
+        ],
+        "descripcion_grafico": "Barras o dispersión mostrando la rotación por producto."
+    }
+]

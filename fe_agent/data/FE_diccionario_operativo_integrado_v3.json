@@ -1,0 +1,146 @@
+{
+  "descripcion": "Diccionario operativo integrado de acciones disponibles para el Agente FE. Cada acción define su descripción funcional, el tipo de procesamiento requerido, el flujo n8n asociado y los alias semánticos que el LLM debe reconocer como equivalentes.",
+  "version": "v3",
+  "acciones": {
+    "consultar_total_ventas": {
+      "descripcion": "Obtiene el total de ventas realizadas en un período determinado.",
+      "nivel_procesamiento": "menor",
+      "funcion_n8n": "fe_total_ventas",
+      "webhook_url": "http://n8n:5678/webhook/fe_total_ventas",
+      "fuente_datos": ["ventas"],
+      "respuesta_tipo": "texto",
+      "alias_semanticos": ["mostrar facturación", "ver ingresos", "consultar ventas totales", "total vendido", "monto facturado"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "consultar_total_compras": {
+      "descripcion": "Calcula el total de compras realizadas a proveedores en un período.",
+      "nivel_procesamiento": "menor",
+      "funcion_n8n": "fe_total_compras",
+      "webhook_url": "http://n8n:5678/webhook/fe_total_compras",
+      "fuente_datos": ["compras"],
+      "respuesta_tipo": "texto",
+      "alias_semanticos": ["ver compras totales", "mostrar adquisiciones", "total de compras", "gastos en proveedores"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "consultar_margen_global": {
+      "descripcion": "Compara las ventas y compras para calcular el margen global del período.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_margen_global",
+      "webhook_url": "http://n8n:5678/webhook/fe_margen_global",
+      "fuente_datos": ["ventas", "compras"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["calcular utilidad global", "ver margen de ganancia", "analizar rentabilidad general", "consultar beneficio neto"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "obtener_top_productos_vendidos": {
+      "descripcion": "Lista los productos más vendidos durante un período, ordenados por unidades o monto.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_top_productos_vendidos",
+      "webhook_url": "http://n8n:5678/webhook/fe_top_productos_vendidos",
+      "fuente_datos": ["ventas", "productos"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["productos más vendidos", "productos destacados", "artículos con más ventas", "top de ventas"],
+      "visualizaciones_recomendadas": ["barras", "torta"]
+    },
+    "consultar_tendencia_ventas": {
+      "descripcion": "Muestra la evolución de las ventas a lo largo del tiempo en el período solicitado.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_tendencia_ventas",
+      "webhook_url": "http://n8n:5678/webhook/fe_tendencia_ventas",
+      "fuente_datos": ["ventas"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["tendencia de facturación", "evolución de ventas", "histórico de ingresos", "progreso de ventas"],
+      "visualizaciones_recomendadas": ["líneas", "barras"]
+    },
+    "consultar_relacion_compras_ventas": {
+      "descripcion": "Compara las ventas y compras del mismo período y entrega una tabla comparativa.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_comparar_ventas_compras",
+      "webhook_url": "http://n8n:5678/webhook/fe_comparar_ventas_compras",
+      "fuente_datos": ["ventas", "compras"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["comparar ventas y compras", "relación compras ventas", "balance comercial"],
+      "visualizaciones_recomendadas": ["columnas", "barras"]
+    },
+    "consultar_categorias_mas_rentables": {
+      "descripcion": "Muestra las categorías de productos que generan más ingresos y margen.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_categorias_rentables",
+      "webhook_url": "http://n8n:5678/webhook/fe_categorias_rentables",
+      "fuente_datos": ["ventas", "productos"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["categorías más rentables", "familias con mayor utilidad", "líneas de producto más rentables"],
+      "visualizaciones_recomendadas": ["torta", "barras"]
+    },
+    "consultar_productos_baja_rotacion": {
+      "descripcion": "Identifica los productos con menor frecuencia de venta en el período.",
+      "nivel_procesamiento": "menor",
+      "funcion_n8n": "fe_productos_baja_rotacion",
+      "webhook_url": "http://n8n:5678/webhook/fe_productos_baja_rotacion",
+      "fuente_datos": ["ventas", "productos"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["productos lentos en venta", "artículos con baja salida", "productos menos vendidos"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "consultar_productos_mayor_stock": {
+      "descripcion": "Entrega la lista de productos con mayor stock disponible.",
+      "nivel_procesamiento": "menor",
+      "funcion_n8n": "fe_productos_mayor_stock",
+      "webhook_url": "http://n8n:5678/webhook/fe_productos_mayor_stock",
+      "fuente_datos": ["productos"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["productos con más inventario", "mayor cantidad en stock", "artículos más disponibles"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "consultar_top_clientes": {
+      "descripcion": "Identifica los clientes que más compras han realizado.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_top_clientes",
+      "webhook_url": "http://n8n:5678/webhook/fe_top_clientes",
+      "fuente_datos": ["ventas", "clientes"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["clientes principales", "clientes destacados", "mayores compradores"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "consultar_clientes_inactivos": {
+      "descripcion": "Lista los clientes que no realizaron compras en el período analizado.",
+      "nivel_procesamiento": "menor",
+      "funcion_n8n": "fe_clientes_inactivos",
+      "webhook_url": "http://n8n:5678/webhook/fe_clientes_inactivos",
+      "fuente_datos": ["clientes", "ventas"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["clientes sin compras", "clientes pasivos", "clientes dormidos"],
+      "visualizaciones_recomendadas": ["tabla"]
+    },
+    "consultar_top_proveedores": {
+      "descripcion": "Obtiene los proveedores con mayor volumen de compras.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_top_proveedores",
+      "webhook_url": "http://n8n:5678/webhook/fe_top_proveedores",
+      "fuente_datos": ["compras", "proveedores"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["proveedores principales", "mayores proveedores", "proveedores con más volumen"],
+      "visualizaciones_recomendadas": ["barras", "columnas"]
+    },
+    "consultar_productos_mas_rentables": {
+      "descripcion": "Determina los productos más rentables según margen y rotación.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_productos_rentables",
+      "webhook_url": "http://n8n:5678/webhook/fe_productos_rentables",
+      "fuente_datos": ["ventas", "compras", "productos"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["productos con mayor utilidad", "productos con mejor margen", "productos más rentables"],
+      "visualizaciones_recomendadas": ["barras", "dispersión"]
+    },
+    "consultar_tendencia_anual_ganancias": {
+      "descripcion": "Muestra la evolución de las ganancias acumuladas por trimestre en el año.",
+      "nivel_procesamiento": "mayor",
+      "funcion_n8n": "fe_tendencia_anual_ganancias",
+      "webhook_url": "http://n8n:5678/webhook/fe_tendencia_anual_ganancias",
+      "fuente_datos": ["ventas", "compras"],
+      "respuesta_tipo": "tabla",
+      "alias_semanticos": ["tendencia de utilidades", "evolución de ganancias", "variación de beneficios"],
+      "visualizaciones_recomendadas": ["líneas", "barras"]
+    }
+  }
+}

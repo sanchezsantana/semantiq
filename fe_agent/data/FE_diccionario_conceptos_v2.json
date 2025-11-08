@@ -1,0 +1,607 @@
+{
+  "conceptos": {
+    "productos": {
+      "descripcion": "Listado de productos o artículos que la ferretería mantiene en stock y ofrece a la venta.",
+      "categoria": "inventario",
+      "tipo_concepto": "entidad",
+      "acciones_relacionadas": [
+        "consultar_stock_actual",
+        "evaluar_rotacion_inventario",
+        "detectar_productos_inmovilizados"
+      ],
+      "sinonimos": [
+        "artículos",
+        "ítems",
+        "mercadería",
+        "materiales"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true,
+      "fields": {
+        "id_producto": "Identificador único del producto (por ejemplo 'P001').",
+        "nombre": "Nombre comercial del producto.",
+        "descripcion": "Detalle breve del producto (material, uso).",
+        "precio_unitario": "Precio de venta unitario al público (en CLP).",
+        "stock": "Cantidad disponible en inventario.",
+        "categoria": "Clasificación del producto (herramientas, electricidad, gasfitería, etc.)."
+      }
+    },
+    "ventas": {
+      "descripcion": "Registros de ventas realizadas a clientes, incluyendo fecha, monto y detalle de productos vendidos.",
+      "categoria": "finanzas",
+      "tipo_concepto": "entidad",
+      "acciones_relacionadas": [
+        "consultar_total_ventas",
+        "analizar_tendencia_ventas_anual",
+        "calcular_ticket_promedio"
+      ],
+      "sinonimos": [
+        "transacciones",
+        "boletas",
+        "facturas de venta",
+        "operaciones comerciales"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "operativo",
+      "combinable": true,
+      "fields": {
+        "id_venta": "Código único de la venta.",
+        "fecha_venta": "Fecha de la transacción.",
+        "id_cliente": "Identificador del cliente.",
+        "total": "Monto total de la venta (CLP)."
+      }
+    },
+    "compras": {
+      "descripcion": "Compras a proveedores para reponer stock y mantener la operación comercial.",
+      "categoria": "finanzas",
+      "tipo_concepto": "entidad",
+      "acciones_relacionadas": [
+        "consultar_total_compras",
+        "analizar_tendencia_compras_anual"
+      ],
+      "sinonimos": [
+        "pedidos",
+        "abastecimiento",
+        "reposición",
+        "compras a proveedores"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "operativo",
+      "combinable": true,
+      "fields": {
+        "id_compra": "Código único de la compra.",
+        "fecha_compra": "Fecha de la compra.",
+        "id_proveedor": "Identificador del proveedor.",
+        "total": "Monto total de la compra (CLP)."
+      }
+    },
+    "clientes": {
+      "descripcion": "Registro de clientes frecuentes, nuevos o estratégicos.",
+      "categoria": "clientes",
+      "tipo_concepto": "entidad",
+      "acciones_relacionadas": [
+        "clientes_frecuentes",
+        "clientes_estrategicos",
+        "analizar_tendencia_clientes"
+      ],
+      "sinonimos": [
+        "compradores",
+        "consumidores",
+        "clientes habituales",
+        "clientes empresa"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "gerencial",
+      "combinable": true,
+      "fields": {
+        "id_cliente": "Identificador único del cliente.",
+        "nombre": "Nombre o razón social.",
+        "tipo": "Tipo de cliente (particular, empresa, contratista).",
+        "ventas_totales": "Monto total comprado por el cliente (CLP)."
+      }
+    },
+    "proveedores": {
+      "descripcion": "Listado de proveedores con sus características comerciales clave.",
+      "categoria": "proveedores",
+      "tipo_concepto": "entidad",
+      "acciones_relacionadas": [
+        "proveedores_mas_confiables",
+        "analizar_concentracion_proveedores"
+      ],
+      "sinonimos": [
+        "fabricantes",
+        "distribuidores",
+        "mayoristas",
+        "socios comerciales"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "gerencial",
+      "combinable": true,
+      "fields": {
+        "id_proveedor": "Identificador único del proveedor.",
+        "nombre": "Nombre comercial o razón social.",
+        "fiabilidad": "Nivel de cumplimiento (porcentaje).",
+        "total_compras": "Monto total comprado al proveedor (CLP)."
+      }
+    },
+    "ventas_totales": {
+      "descripcion": "Monto total vendido en un período definido.",
+      "categoria": "ventas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "consultar_total_ventas",
+        "analizar_tendencia_ventas_anual"
+      ],
+      "sinonimos": [
+        "ventas del período",
+        "ingresos por ventas"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "ticket_promedio": {
+      "descripcion": "Monto promedio por venta considerando todas las transacciones del período.",
+      "categoria": "ventas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "calcular_ticket_promedio",
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "venta promedio",
+        "ticket medio",
+        "importe medio"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "ventas_por_producto": {
+      "descripcion": "Desglose de ventas por producto o línea.",
+      "categoria": "sales",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "productos_mas_vendidos",
+        "analizar_tendencia_ventas_anual"
+      ],
+      "sinonimos": [
+        "top productos",
+        "ventas por ítem"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "ventas_por_cliente": {
+      "descripcion": "Participación de cada cliente en las ventas totales del período.",
+      "categoria": "ventas",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "ventas_por_cliente",
+        "clientes_estrategicos"
+      ],
+      "sinonimos": [
+        "ranking de clientes",
+        "ventas por comprador"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "ventas_acumuladas": {
+      "descripcion": "Ventas sumadas en un período prolongado (mensual, trimestral o anual).",
+      "categoria": "ventas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "consultar_total_ventas",
+        "analizar_tendencia_ventas_anual"
+      ],
+      "sinonimos": [
+        "ventas globales",
+        "ingresos acumulados"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "porcentaje_ventas": {
+      "descripcion": "Porcentaje que representa una categoría, producto o cliente respecto del total de ventas.",
+      "categoria": "ventas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "participacion_categoria_producto",
+        "productos_mas_vendidos"
+      ],
+      "sinonimos": [
+        "participación en ventas",
+        "peso en ventas"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "margen_global": {
+      "descripcion": "Diferencia porcentual entre ventas y compras en un período.",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "calcular_margen_global",
+        "analizar_tendencia_margen"
+      ],
+      "sinonimos": [
+        "rentabilidad",
+        "beneficio bruto"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "margen_trimestral": {
+      "descripcion": "Margen bruto obtenido en un trimestre calendario (p. ej., enero-marzo).",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "calcular_margen_global_trimestral",
+        "comparar_ventas_trimestres"
+      ],
+      "sinonimos": [
+        "margen del trimestre",
+        "rentabilidad trimestral"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "margen_comparativo": {
+      "descripcion": "Comparación de márgenes entre dos períodos (mes o trimestre).",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "comparar_ventas_trimestres",
+        "analizar_tendencia_margen"
+      ],
+      "sinonimos": [
+        "variación de margen",
+        "comparativo de rentabilidad"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "utilidad_bruta": {
+      "descripcion": "Ventas menos costo de compras del período.",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "calcular_margen_global"
+      ],
+      "sinonimos": [
+        "ganancia bruta"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "utilidad_neta": {
+      "descripcion": "Utilidad final después de costos y gastos operacionales.",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "ganancia neta",
+        "resultado final"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "variacion_ventas": {
+      "descripcion": "Cambio porcentual de ventas respecto del período anterior.",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "analizar_tendencia_ventas_anual"
+      ],
+      "sinonimos": [
+        "crecimiento de ventas",
+        "disminución de ventas"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "proyeccion_ventas": {
+      "descripcion": "Estimación de ventas futuras basada en tendencia reciente.",
+      "categoria": "finanzas",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "forecast de ventas",
+        "proyección comercial"
+      ],
+      "unidad": "CLP",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "stock_actual": {
+      "descripcion": "Unidades disponibles actualmente por producto.",
+      "categoria": "inventario",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "consultar_stock_actual",
+        "detectar_productos_inmovilizados"
+      ],
+      "sinonimos": [
+        "existencias",
+        "stock disponible"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "rotacion_inventario": {
+      "descripcion": "Número de veces que el stock se renueva en un período.",
+      "categoria": "inventario",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "evaluar_rotacion_inventario",
+        "analizar_tendencia_stock"
+      ],
+      "sinonimos": [
+        "rotación de stock",
+        "renovación de inventario"
+      ],
+      "unidad": "veces",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "productos_inmovilizados": {
+      "descripcion": "Artículos sin venta en un período determinado.",
+      "categoria": "inventario",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "detectar_productos_inmovilizados",
+        "consultar_stock_actual"
+      ],
+      "sinonimos": [
+        "stock inmovilizado",
+        "sin rotación"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "stock_minimo": {
+      "descripcion": "Nivel mínimo recomendado para evitar quiebres de stock.",
+      "categoria": "inventario",
+      "tipo_concepto": "regla",
+      "acciones_relacionadas": [
+        "alertar_stock_bajo",
+        "consultar_stock_actual"
+      ],
+      "sinonimos": [
+        "mínimo de seguridad",
+        "stock de seguridad"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "quiebre_stock": {
+      "descripcion": "Ausencia de stock en productos de alta rotación o críticos.",
+      "categoria": "inventario",
+      "tipo_concepto": "evento",
+      "acciones_relacionadas": [
+        "alertar_stock_bajo",
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "sin stock",
+        "agotado"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "dias_cobertura_stock": {
+      "descripcion": "Días que el stock actual puede cubrir según ventas promedio.",
+      "categoria": "inventario",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "evaluar_rotacion_inventario",
+        "alertar_stock_bajo"
+      ],
+      "sinonimos": [
+        "cobertura de inventario",
+        "autonomía de stock"
+      ],
+      "unidad": "días",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "clientes_estrategicos": {
+      "descripcion": "Clientes que concentran un alto porcentaje de las ventas totales (p. ej., top 10%).",
+      "categoria": "clientes",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "clientes_estrategicos",
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "clientes clave",
+        "principales clientes"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "clientes_frecuentes": {
+      "descripcion": "Clientes con compras recurrentes en un período reciente.",
+      "categoria": "clientes",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "clientes_frecuentes",
+        "analizar_tendencia_clientes"
+      ],
+      "sinonimos": [
+        "recurrentes",
+        "habituales"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "nuevos_clientes": {
+      "descripcion": "Clientes incorporados por primera vez en el período.",
+      "categoria": "clientes",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "nuevos_clientes",
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "clientes nuevos",
+        "alta de clientes"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "perdida_clientes": {
+      "descripcion": "Clientes que dejaron de comprar respecto del período anterior.",
+      "categoria": "clientes",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "perdida_clientes",
+        "analizar_tendencia_clientes"
+      ],
+      "sinonimos": [
+        "churn",
+        "deserción de clientes"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "proveedores_confiables": {
+      "descripcion": "Proveedores con buen historial de cumplimiento en plazos y condiciones.",
+      "categoria": "proveedores",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "proveedores_mas_confiables",
+        "analizar_concentracion_proveedores"
+      ],
+      "sinonimos": [
+        "cumplidores",
+        "socios estables"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "concentracion_proveedores": {
+      "descripcion": "Proporción del gasto concentrado en pocos proveedores.",
+      "categoria": "proveedores",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "analizar_concentracion_proveedores",
+        "generar_resumen_ejecutivo"
+      ],
+      "sinonimos": [
+        "dependencia de proveedores",
+        "concentración de compras"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "tiempo_promedio_entrega": {
+      "descripcion": "Días promedio entre la compra y la recepción de productos del proveedor.",
+      "categoria": "operacion",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "proveedores_mas_confiables"
+      ],
+      "sinonimos": [
+        "lead time",
+        "tiempo de entrega"
+      ],
+      "unidad": "días",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "crecimiento_trimestral": {
+      "descripcion": "Tasa de crecimiento de ventas o margen trimestre a trimestre.",
+      "categoria": "finanzas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "analizar_tendencia_ventas_anual",
+        "analizar_tendencia_margen"
+      ],
+      "sinonimos": [
+        "variación trimestral",
+        "crecimiento QoQ"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "participacion_categoria_producto": {
+      "descripcion": "Peso que tiene una categoría de productos dentro del total de ventas.",
+      "categoria": "ventas",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "participacion_categoria_producto",
+        "productos_mas_vendidos"
+      ],
+      "sinonimos": [
+        "participación por categoría",
+        "peso de categoría"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "variacion_stock": {
+      "descripcion": "Diferencia de stock entre períodos (ingresos - salidas).",
+      "categoria": "inventario",
+      "tipo_concepto": "métrica",
+      "acciones_relacionadas": [
+        "consultar_stock_actual",
+        "evaluar_rotacion_inventario"
+      ],
+      "sinonimos": [
+        "cambio de stock",
+        "movimiento neto de inventario"
+      ],
+      "unidad": "unidades",
+      "nivel_analisis": "operativo",
+      "combinable": true
+    },
+    "indice_fidelizacion": {
+      "descripcion": "Porcentaje de clientes que repiten compra en el año.",
+      "categoria": "clientes",
+      "tipo_concepto": "indicador",
+      "acciones_relacionadas": [
+        "clientes_frecuentes",
+        "analizar_tendencia_clientes"
+      ],
+      "sinonimos": [
+        "retención de clientes",
+        "lealtad de clientes"
+      ],
+      "unidad": "%",
+      "nivel_analisis": "gerencial",
+      "combinable": true
+    },
+    "relations": "proveedores -> compras -> detalle_compras -> productos -> detalle_ventas -> ventas -> clientes"
+  },
+  "version": "v2",
+  "updated_at": "2025-10-29T01:16:47.889775Z"
+}

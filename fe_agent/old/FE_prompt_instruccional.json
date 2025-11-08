@@ -1,0 +1,142 @@
+[
+    {
+        "id": 1,
+        "pregunta": "¿Cuál fue el total de ventas durante el trimestre?",
+        "instruccion_para_LLM": "Responde con una frase clara en lenguaje natural que indique el valor numérico solicitado, incluyendo contexto del período (enero–marzo 2025) y unidad monetaria (pesos chilenos).",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Respuesta:** El total de ventas del trimestre enero–marzo 2025 fue de aproximadamente $45.200.\n\n*(La cifra debe calcularse a partir de los datos de la tabla de ventas.)*"
+    },
+    {
+        "id": 2,
+        "pregunta": "¿Cuál fue el total de compras realizadas a los proveedores durante el mismo período?",
+        "instruccion_para_LLM": "Responde con una frase clara en lenguaje natural que indique el valor numérico solicitado, incluyendo contexto del período (enero–marzo 2025) y unidad monetaria (pesos chilenos).",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Respuesta:** El total de ventas del trimestre enero–marzo 2025 fue de aproximadamente $45.200.\n\n*(La cifra debe calcularse a partir de los datos de la tabla de ventas.)*"
+    },
+    {
+        "id": 3,
+        "pregunta": "¿Cuál fue el margen de ganancia global del período?",
+        "instruccion_para_LLM": "Genera una tabla en formato Markdown con las columnas indicadas, seguida de un texto breve resumiendo la observación principal.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "| Indicador | Valor |\n| --- | --- |\n| Ejemplo 1 | Valor 1 |\n| Ejemplo 2 | Valor 2 |\n\n**Resumen:** Los valores muestran la distribución de resultados para el trimestre."
+    },
+    {
+        "id": 4,
+        "pregunta": "¿Cuáles fueron los 5 productos más vendidos?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Producto | Unidades Vendidas | Total en Ventas ($) |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico de barras horizontales mostrando las unidades vendidas por producto."
+    },
+    {
+        "id": 5,
+        "pregunta": "¿Qué producto generó más ingresos totales?",
+        "instruccion_para_LLM": "Responde con una frase clara en lenguaje natural que indique el valor numérico solicitado, incluyendo contexto del período (enero–marzo 2025) y unidad monetaria (pesos chilenos).",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Respuesta:** El total de ventas del trimestre enero–marzo 2025 fue de aproximadamente $45.200.\n\n*(La cifra debe calcularse a partir de los datos de la tabla de ventas.)*"
+    },
+    {
+        "id": 6,
+        "pregunta": "¿Qué clientes compraron más durante el trimestre?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Cliente | Total de compras ($) | Número de transacciones |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico de barras horizontales con los 5 clientes con mayores compras."
+    },
+    {
+        "id": 7,
+        "pregunta": "¿Qué proveedores fueron los más importantes por volumen de compra?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Proveedor | Monto total comprado ($) | Órdenes de compra |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico circular mostrando la participación de cada proveedor."
+    },
+    {
+        "id": 8,
+        "pregunta": "¿Cómo se comportaron las ventas mes a mes?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Mes | Total de Ventas ($) | Número de Ventas |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico de línea temporal con el monto de ventas mensual."
+    },
+    {
+        "id": 9,
+        "pregunta": "¿Qué producto tuvo la mayor diferencia entre unidades compradas y vendidas?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Producto | Compradas | Vendidas | Diferencia |\n| --- | --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Barras positivas/negativas mostrando exceso o déficit de stock."
+    },
+    {
+        "id": 10,
+        "pregunta": "¿Cuál es el stock actual por producto?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Producto | Stock Actual | Precio Unitario | Valor de Inventario ($) |\n| --- | --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Barras horizontales mostrando el valor de inventario por producto."
+    },
+    {
+        "id": 11,
+        "pregunta": "¿Qué productos tuvieron margen de ganancia más alto?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Producto | Precio Compra Promedio | Precio Venta Promedio | Margen (%) |\n| --- | --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Barras ordenadas por margen descendente."
+    },
+    {
+        "id": 12,
+        "pregunta": "¿Qué ciudades concentran la mayor cantidad de clientes?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Ciudad | Clientes | Ventas Totales ($) |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Mapa o gráfico de barras agrupadas por ciudad."
+    },
+    {
+        "id": 13,
+        "pregunta": "¿Qué tipo de cliente compra más?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Tipo Cliente | Ventas Totales ($) | % del Total |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico circular con participación de tipos de cliente."
+    },
+    {
+        "id": 14,
+        "pregunta": "¿Cuáles son los días con mayor cantidad de ventas?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Fecha | Ventas ($) | Transacciones |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico de línea o barras mostrando las ventas diarias."
+    },
+    {
+        "id": 15,
+        "pregunta": "¿Cuántos productos diferentes se vendieron por mes?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Mes | Productos Distintos Vendidos |\n| --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Gráfico de barras mostrando la diversidad de productos vendidos por mes."
+    },
+    {
+        "id": 16,
+        "pregunta": "¿Cuál fue el ticket promedio de venta?",
+        "instruccion_para_LLM": "Genera una tabla en formato Markdown con las columnas indicadas, seguida de un texto breve resumiendo la observación principal.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "| Mes | Ventas Totales ($) | Número de Ventas | Ticket Promedio ($) |\n| --- | --- | --- | --- |\n| Ejemplo 1 | Valor 1 |\n| Ejemplo 2 | Valor 2 |\n\n**Resumen:** Los valores muestran la distribución de resultados para el trimestre."
+    },
+    {
+        "id": 17,
+        "pregunta": "¿Qué clientes no realizaron compras en los últimos dos meses?",
+        "instruccion_para_LLM": "Genera una tabla en formato Markdown con las columnas indicadas, seguida de un texto breve resumiendo la observación principal.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "| Cliente | Última Fecha de Compra |\n| --- | --- |\n| Ejemplo 1 | Valor 1 |\n| Ejemplo 2 | Valor 2 |\n\n**Resumen:** Los valores muestran la distribución de resultados para el trimestre."
+    },
+    {
+        "id": 18,
+        "pregunta": "¿Cuáles productos presentan bajo nivel de stock?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Producto | Stock Actual | Nivel Crítico (≤10 unidades) |\n| --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Barras rojas para alertar bajo stock."
+    },
+    {
+        "id": 19,
+        "pregunta": "¿Cuál es el valor monetario total del inventario actual?",
+        "instruccion_para_LLM": "Genera una tabla en formato Markdown con las columnas indicadas, seguida de un texto breve resumiendo la observación principal.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "| Producto | Stock | Precio Unitario | Valor de Inventario ($) |\n| --- | --- | --- | --- |\n| Ejemplo 1 | Valor 1 |\n| Ejemplo 2 | Valor 2 |\n\n**Resumen:** Los valores muestran la distribución de resultados para el trimestre."
+    },
+    {
+        "id": 20,
+        "pregunta": "¿Cuál fue el producto con la mayor rotación (ventas / stock disponible)?",
+        "instruccion_para_LLM": "Responde con un texto introductorio breve, seguido de una tabla Markdown con los datos solicitados, y finaliza con una descripción textual del gráfico recomendado.",
+        "formato_respuesta_ideal": "markdown",
+        "ejemplo_markdown": "**Análisis solicitado:**\n\n| Producto | Ventas Totales (unid.) | Stock Final | Ratio Rotación |\n| --- | --- | --- | --- |\n| Ejemplo A | 120 |\n| Ejemplo B | 98 |\n\n**Visualización sugerida:** Barras o dispersión mostrando la rotación por producto."
+    }
+]

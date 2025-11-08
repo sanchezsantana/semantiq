@@ -1,0 +1,90 @@
+{
+  "descripcion": "Diccionario conceptual de dominio para la ferretería. Cada concepto define su significado, sus sinónimos operativos y el contexto en el que se aplica. El agente debe reconocer los sinónimos como equivalentes semánticos y usarlos para mejorar la interpretación de las preguntas del usuario.",
+  "version": "v3",
+  "conceptos": [
+    {
+      "concepto": "ventas",
+      "definicion": "Transacciones en las que la ferretería entrega productos o servicios a cambio de dinero.",
+      "sinonimos": ["facturación", "ingresos", "ventas totales", "monto vendido", "facturas emitidas", "total de ventas"],
+      "contexto_asociado": ["consultar_total_ventas", "consultar_tendencia_ventas", "comparar_ventas_compras"]
+    },
+    {
+      "concepto": "compras",
+      "definicion": "Transacciones en las que la ferretería adquiere productos o materiales de sus proveedores.",
+      "sinonimos": ["adquisiciones", "órdenes de compra", "compras realizadas", "gastos en proveedores", "total de compras"],
+      "contexto_asociado": ["consultar_total_compras", "consultar_relacion_compras_ventas", "consultar_top_proveedores"]
+    },
+    {
+      "concepto": "margen",
+      "definicion": "Diferencia entre el total de ventas y el total de compras o costos, expresada en monto o porcentaje.",
+      "sinonimos": ["utilidad", "ganancia", "beneficio", "resultado", "rentabilidad"],
+      "contexto_asociado": ["consultar_margen_global", "consultar_productos_mas_rentables"]
+    },
+    {
+      "concepto": "productos",
+      "definicion": "Artículos o materiales comercializados por la ferretería.",
+      "sinonimos": ["artículos", "materiales", "ítems", "mercancías", "referencias"],
+      "contexto_asociado": ["obtener_top_productos_vendidos", "consultar_productos_baja_rotacion", "consultar_productos_mayor_stock"]
+    },
+    {
+      "concepto": "clientes",
+      "definicion": "Personas o empresas que compran productos a la ferretería.",
+      "sinonimos": ["compradores", "usuarios finales", "consumidores", "empresas clientes"],
+      "contexto_asociado": ["consultar_top_clientes", "consultar_clientes_inactivos"]
+    },
+    {
+      "concepto": "proveedores",
+      "definicion": "Empresas o personas que suministran materiales o productos a la ferretería.",
+      "sinonimos": ["suministradores", "vendedores mayoristas", "distribuidores", "socios comerciales"],
+      "contexto_asociado": ["consultar_top_proveedores", "consultar_productos_por_proveedor"]
+    },
+    {
+      "concepto": "stock",
+      "definicion": "Cantidad de unidades disponibles de cada producto en el inventario.",
+      "sinonimos": ["inventario", "existencias", "almacén", "cantidad disponible", "nivel de stock"],
+      "contexto_asociado": ["consultar_productos_mayor_stock"]
+    },
+    {
+      "concepto": "rotación",
+      "definicion": "Frecuencia con la que los productos se venden o renuevan en el inventario.",
+      "sinonimos": ["velocidad de venta", "frecuencia de salida", "nivel de movimiento", "rotación de productos"],
+      "contexto_asociado": ["consultar_productos_baja_rotacion", "consultar_productos_mas_rentables"]
+    },
+    {
+      "concepto": "categorías",
+      "definicion": "Grupos o familias de productos con características similares.",
+      "sinonimos": ["familias de productos", "líneas de productos", "tipos de artículos"],
+      "contexto_asociado": ["consultar_categorias_mas_rentables"]
+    },
+    {
+      "concepto": "periodo",
+      "definicion": "Intervalo temporal sobre el cual se realiza el análisis (por ejemplo, trimestre o mes).",
+      "sinonimos": ["trimestre", "mes", "semestre", "año", "lapso de tiempo", "rango temporal"],
+      "contexto_asociado": ["consultar_total_ventas", "consultar_total_compras", "consultar_tendencia_ventas"]
+    },
+    {
+      "concepto": "ganancias",
+      "definicion": "Resultado positivo derivado de la diferencia entre ventas e inversiones o costos.",
+      "sinonimos": ["beneficio neto", "resultado financiero", "utilidad final"],
+      "contexto_asociado": ["consultar_tendencia_anual_ganancias", "consultar_margen_global"]
+    },
+    {
+      "concepto": "relación compras-ventas",
+      "definicion": "Comparación entre los montos de ventas y los montos de compras en un mismo período.",
+      "sinonimos": ["comparativa de ventas y compras", "balance comercial", "proporción ventas compras"],
+      "contexto_asociado": ["consultar_relacion_compras_ventas", "comparar_ventas_compras"]
+    },
+    {
+      "concepto": "inactividad",
+      "definicion": "Situación en la que un cliente no ha realizado compras durante un período determinado.",
+      "sinonimos": ["clientes sin compras", "clientes dormidos", "clientes pasivos"],
+      "contexto_asociado": ["consultar_clientes_inactivos"]
+    },
+    {
+      "concepto": "rentabilidad",
+      "definicion": "Medida que indica qué tan rentable es un producto o categoría según su margen y rotación.",
+      "sinonimos": ["eficiencia económica", "retorno", "rendimiento"],
+      "contexto_asociado": ["consultar_productos_mas_rentables", "consultar_categorias_mas_rentables"]
+    }
+  ]
+}

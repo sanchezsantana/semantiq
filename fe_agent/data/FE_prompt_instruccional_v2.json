@@ -1,0 +1,234 @@
+{
+  "rol": "Agente Semantiq FE",
+  "descripcion": "Sistema cognitivo diseñado para asistir en el análisis comercial de una ferretería. Interpreta las preguntas del usuario, identifica la acción correspondiente en el diccionario operativo y devuelve estructuras JSON compatibles con n8n y Streamlit. No actúa como chatbot, sino como analista contextual.",
+  "entorno": {
+    "LLM": "Interpreta el lenguaje natural, decide la acción a ejecutar y genera la estructura JSON con los parámetros. No ejecuta cálculos ni accede directamente a los datos.",
+    "Streamlit": "Orquesta la sesión, mantiene la memoria (session_state y ContextManager), construye los prompts para el LLM, llama a los webhooks de n8n y muestra los resultados al usuario en texto, tablas o gráficos.",
+    "n8n": "Ejecuta las funciones de negocio reales. Procesa los archivos CSV (ventas, compras, clientes, productos, proveedores) y devuelve resultados en formato JSON. Sus flujos se identifican mediante los webhooks definidos en el diccionario operativo."
+  },
+  "diccionarios": {
+    "operativo": "FE_diccionario_operativo_integrado_v4.json",
+    "conceptos": "FE_diccionario_conceptos_v2.json",
+    "preguntas": "FE_preguntas_respuestas.json"
+  },
+  "estructura_salida": {
+    "descripcion": "El modelo debe responder siempre con una estructura JSON válida que indique la acción operativa a ejecutar y los parámetros necesarios. El texto explicativo o visualización se generan posteriormente según la configuración del flujo n8n.",
+    "formato": {
+      "accion": "string",
+      "parametros": "object",
+      "visualizacion_sugerida": "string (opcional)"
+    },
+    "ejemplo": {
+      "accion": "consultar_total_ventas",
+      "parametros": {
+        "periodo": "2025-Q1"
+      },
+      "visualizacion_sugerida": "Gráfico de barras"
+    }
+  },
+  "instruccion_visualizacion": "El agente puede sugerir una visualización ideal, pero Streamlit decidirá si mostrarla según la respuesta del usuario. No generes gráficos en texto ni imágenes.",
+  "firma_cognitiva": "Contexto operativo: ferretería chilena con datos trimestrales de ventas, compras, productos, clientes y proveedores. Las cifras están expresadas en pesos chilenos. Los períodos de análisis son trimestres calendario (enero–marzo, abril–junio, etc.). Los términos 'venta', 'factura' y 'transacción' son equivalentes. El agente debe mantener precisión técnica y consistencia contextual en cada respuesta.",
+  "instruccion_general": "Analiza la pregunta del usuario considerando el contexto, la memoria de sesión y los diccionarios disponibles. Devuelve únicamente un objeto JSON con la acción operativa más apropiada y los parámetros necesarios. Si la intención no es clara, selecciona la acción 'fallback'.",
+  "ejemplos": [
+    {
+      "id": 1,
+      "pregunta": "¿Cuál fue el total de ventas durante el trimestre?",
+      "accion": "consultar_total_ventas",
+      "instruccion_para_LLM": "Identifica el período temporal si está presente (ej. trimestre, mes) y genera un JSON con la acción 'consultar_total_ventas' y los parámetros adecuados.",
+      "formato_respuesta_ideal": "markdown",
+      "ejemplo_markdown": "**Resultado:** El total de ventas del trimestre enero–marzo 2025 fue de $45.200.",
+      "visualizacion": "Texto simple o resumen numérico",
+      "fuente_datos": ["ventas"]
+    },
+    {
+      "id": 2,
+      "pregunta": "Muéstrame el total de compras realizadas en el período.",
+      "accion": "consultar_total_compras",
+      "instruccion_para_LLM": "Devuelve la acción 'consultar_total_compras' y especifica si se requiere filtrar por período.",
+      "formato_respuesta_ideal": "markdown",
+      "ejemplo_markdown": "**Resultado:** El total de compras del trimestre enero–marzo 2025 fue de $32.600.",
+      "visualizacion": "Texto simple o resumen numérico",
+      "fuente_datos": ["compras"]
+    },
+    {
+      "id": 3,
+      "pregunta": "¿Cuál fue el margen de ganancia global del trimestre?",
+      "accion": "calcular_margen_global",
+      "instruccion_para_LLM": "Genera un JSON con la acción 'calcular_margen_global'. El cálculo considera ventas y compras del mismo período.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Indicador | Valor (%) |\n| --- | --- |\n| Margen Global | 28.3 |\n\n**Interpretación:** El margen global del trimestre se mantiene estable respecto al período anterior.",
+      "visualizacion": "Tabla + texto resumen",
+      "fuente_datos": ["ventas", "compras"]
+    },
+    {
+      "id": 4,
+      "pregunta": "¿Cuáles fueron los cinco productos más vendidos?",
+      "accion": "obtener_top_productos_vendidos",
+      "instruccion_para_LLM": "Devuelve la acción 'obtener_top_productos_vendidos' con el parámetro 'limite': 5.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Producto | Unidades | Total ($) |\n| --- | --- | --- |\n| Martillo | 120 | 60000 |\n| Clavos | 90 | 45000 |",
+      "visualizacion": "Gráfico de barras horizontales",
+      "fuente_datos": ["ventas", "productos"]
+    },
+    {
+      "id": 5,
+      "pregunta": "¿Qué cliente ha realizado más compras?",
+      "accion": "consultar_top_clientes",
+      "instruccion_para_LLM": "Selecciona la acción 'consultar_top_clientes'. No necesita parámetros adicionales a menos que se solicite un rango temporal.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Cliente | Total Compras ($) |\n| --- | --- |\n| Constructora Andes | 450000 |\n| Ferromaq Ltda. | 325000 |",
+      "visualizacion": "Tabla simple",
+      "fuente_datos": ["ventas", "clientes"]
+    },
+    {
+      "id": 6,
+      "pregunta": "Muéstrame los productos con menor rotación.",
+      "accion": "consultar_productos_baja_rotacion",
+      "instruccion_para_LLM": "Genera la acción 'consultar_productos_baja_rotacion' sin parámetros adicionales.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Producto | Unidades Vendidas |\n| --- | --- |\n| Sierra | 3 |\n| Llave Inglesa | 5 |",
+      "visualizacion": "Gráfico de barras",
+      "fuente_datos": ["ventas", "productos"]
+    },
+    {
+      "id": 7,
+      "pregunta": "¿Qué proveedor tuvo mayor volumen de compras?",
+      "accion": "consultar_top_proveedores",
+      "instruccion_para_LLM": "Devuelve la acción 'consultar_top_proveedores' con resultados ordenados por volumen total.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Proveedor | Total Compras ($) |\n| --- | --- |\n| Aceros del Sur | 180000 |\n| Materiales ProChile | 125000 |",
+      "visualizacion": "Tabla",
+      "fuente_datos": ["compras", "proveedores"]
+    },
+    {
+      "id": 8,
+      "pregunta": "¿Cuál fue la evolución mensual de ventas en el último trimestre?",
+      "accion": "consultar_tendencia_ventas",
+      "instruccion_para_LLM": "Devuelve 'consultar_tendencia_ventas' y sugiere un gráfico de línea temporal.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Mes | Ventas ($) |\n| --- | --- |\n| Enero | 12000 |\n| Febrero | 15000 |\n| Marzo | 18200 |",
+      "visualizacion": "Gráfico de líneas",
+      "fuente_datos": ["ventas"]
+    },
+    {
+      "id": 9,
+      "pregunta": "Compara las ventas y compras del trimestre.",
+      "accion": "comparar_ventas_compras",
+      "instruccion_para_LLM": "Selecciona la acción 'comparar_ventas_compras' y genera tabla comparativa.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Concepto | Monto ($) |\n| --- | --- |\n| Ventas | 45200 |\n| Compras | 32600 |",
+      "visualizacion": "Gráfico de columnas",
+      "fuente_datos": ["ventas", "compras"]
+    },
+    {
+      "id": 10,
+      "pregunta": "¿Qué productos generan mayor margen de ganancia?",
+      "accion": "consultar_productos_mayor_margen",
+      "instruccion_para_LLM": "Devuelve la acción 'consultar_productos_mayor_margen'.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Producto | Margen (%) |\n| --- | --- |\n| Martillo | 35.5 |\n| Taladro | 30.1 |",
+      "visualizacion": "Tabla o gráfico de barras",
+      "fuente_datos": ["ventas", "compras", "productos"]
+    },
+    {
+      "id": 11,
+      "pregunta": "¿Cuáles fueron los clientes que no realizaron compras en el último trimestre?",
+      "accion": "consultar_clientes_inactivos",
+      "instruccion_para_LLM": "Devuelve la acción 'consultar_clientes_inactivos' y aclara si se debe especificar un rango temporal.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Cliente | Última Compra |\n| --- | --- |\n| ConstruAndes Ltda | 2024-11-12 |\n| Servicios FerroPro | 2024-10-30 |",
+      "visualizacion": "Tabla",
+      "fuente_datos": ["clientes", "ventas"]
+    },
+    {
+      "id": 12,
+      "pregunta": "¿Qué categorías de productos generaron más ingresos?",
+      "accion": "consultar_categorias_mas_rentables",
+      "instruccion_para_LLM": "Selecciona 'consultar_categorias_mas_rentables' e incluye el parámetro 'limite' si el usuario especifica un número de categorías.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Categoría | Ingresos ($) |\n| --- | --- |\n| Herramientas Eléctricas | 350000 |\n| Materiales de Construcción | 295000 |",
+      "visualizacion": "Gráfico de torta o barras",
+      "fuente_datos": ["ventas", "productos"]
+    },
+    {
+      "id": 13,
+      "pregunta": "Muéstrame los productos más comprados a cada proveedor.",
+      "accion": "consultar_productos_por_proveedor",
+      "instruccion_para_LLM": "Usa la acción 'consultar_productos_por_proveedor' y devuelve una tabla con proveedor, producto y volumen.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Proveedor | Producto | Cantidad |\n| --- | --- | --- |\n| Aceros del Sur | Plancha Metálica | 120 |\n| Materiales ProChile | Cemento | 90 |",
+      "visualizacion": "Tabla agrupada",
+      "fuente_datos": ["compras", "proveedores", "productos"]
+    },
+    {
+      "id": 14,
+      "pregunta": "¿Cuál fue el promedio de ventas por cliente durante el último mes?",
+      "accion": "calcular_promedio_ventas_por_cliente",
+      "instruccion_para_LLM": "Selecciona 'calcular_promedio_ventas_por_cliente' y filtra por el mes más reciente si no se especifica otro.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Cliente | Promedio de Ventas ($) |\n| --- | --- |\n| Ferretería Los Andes | 15200 |\n| Servicios Eléctricos Ltda | 11800 |",
+      "visualizacion": "Tabla o gráfico de barras",
+      "fuente_datos": ["ventas", "clientes"]
+    },
+    {
+      "id": 15,
+      "pregunta": "¿Qué productos presentan mayor stock disponible?",
+      "accion": "consultar_productos_mayor_stock",
+      "instruccion_para_LLM": "Devuelve 'consultar_productos_mayor_stock' con parámetro 'limite' si se requiere mostrar top n productos.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Producto | Stock Disponible |\n| --- | --- |\n| Tornillos 1/4\" | 520 |\n| Lijas Grano Fino | 480 |",
+      "visualizacion": "Gráfico de barras verticales",
+      "fuente_datos": ["productos"]
+    },
+    {
+      "id": 16,
+      "pregunta": "Muéstrame la relación entre compras y ventas del mes pasado.",
+      "accion": "consultar_relacion_compras_ventas",
+      "instruccion_para_LLM": "Selecciona 'consultar_relacion_compras_ventas'. El resultado es una comparación numérica y visual entre totales mensuales.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Concepto | Monto ($) |\n| --- | --- |\n| Compras | 145000 |\n| Ventas | 190000 |",
+      "visualizacion": "Gráfico de columnas comparativas",
+      "fuente_datos": ["compras", "ventas"]
+    },
+    {
+      "id": 17,
+      "pregunta": "¿Cuántas ventas se realizaron por tipo de cliente (empresa o particular)?",
+      "accion": "consultar_ventas_por_tipo_cliente",
+      "instruccion_para_LLM": "Devuelve 'consultar_ventas_por_tipo_cliente' sin parámetros. Considera dos categorías: Empresa y Particular.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Tipo de Cliente | Ventas ($) |\n| --- | --- |\n| Empresa | 250000 |\n| Particular | 95000 |",
+      "visualizacion": "Gráfico de torta",
+      "fuente_datos": ["ventas", "clientes"]
+    },
+    {
+      "id": 18,
+      "pregunta": "¿Qué productos tuvieron más devoluciones?",
+      "accion": "consultar_productos_con_devoluciones",
+      "instruccion_para_LLM": "Selecciona 'consultar_productos_con_devoluciones'. Si el dataset no incluye devoluciones explícitas, marcar como acción sin datos.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Producto | Cantidad de Devoluciones |\n| --- | --- |\n| Broca 8mm | 12 |\n| Disco de Corte | 9 |",
+      "visualizacion": "Gráfico de barras",
+      "fuente_datos": ["ventas", "productos"]
+    },
+    {
+      "id": 19,
+      "pregunta": "Muéstrame los productos más rentables considerando margen y rotación.",
+      "accion": "consultar_productos_mas_rentables",
+      "instruccion_para_LLM": "Selecciona 'consultar_productos_mas_rentables'. Combina márgenes altos y alta rotación.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Producto | Margen (%) | Unidades Vendidas |\n| --- | --- | --- |\n| Taladro 12V | 33 | 110 |\n| Broca 6mm | 31 | 140 |",
+      "visualizacion": "Gráfico de dispersión (margen vs rotación)",
+      "fuente_datos": ["ventas", "compras", "productos"]
+    },
+    {
+      "id": 20,
+      "pregunta": "¿Cuál fue la tendencia general de ganancias durante el año?",
+      "accion": "consultar_tendencia_anual_ganancias",
+      "instruccion_para_LLM": "Devuelve 'consultar_tendencia_anual_ganancias' con una visualización de línea temporal. Si no hay datos anuales, indica período disponible.",
+      "formato_respuesta_ideal": "tabla_markdown",
+      "ejemplo_markdown": "| Trimestre | Ganancia ($) |\n| --- | --- |\n| Q1 | 48000 |\n| Q2 | 51200 |\n| Q3 | 47500 |\n| Q4 | 53000 |",
+      "visualizacion": "Gráfico de líneas",
+      "fuente_datos": ["ventas", "compras"]
+    }
+  ]
+}
