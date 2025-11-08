@@ -1,0 +1,6 @@
+# /C:/repos/semantiq/fe_agent/Untitled-1.txt
+def main():
+    print("Hello from semantiq agent")
+
+if __name__ == "__main__":
+    main()
