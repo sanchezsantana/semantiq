@@ -48,15 +48,16 @@ escenario_operacion:
   lunes_critico:
     fecha: "2025-02-03"
     descripcion: >
-    Día de referencia donde se produce un evento crítico súbito asociado
-    principalmente a R01 (Caída desde Altura), con un incremento inesperado
-    de criticidad que no estaba reflejado plenamente en el ranking previo.
-    R02 mantiene su degradación acumulada como riesgo dominante de fondo,
-    pero el quiebre operacional del lunes se manifiesta en R01.
+      Día de referencia donde se produce un evento crítico súbito asociado
+      principalmente a R01 (Caída desde Altura), con un incremento inesperado
+      de criticidad que no estaba reflejado plenamente en el ranking previo.
+      R02 mantiene su degradación acumulada como riesgo dominante de fondo,
+      pero el quiebre operacional del lunes se manifiesta en R01.
     notas_modelo: >
       El STDE de 12 semanas se usa para entrenar y calibrar las trayectorias
       previas. El lunes crítico sirve como hito de validación del modelo en la
       demo.
+
 
   # Áreas operacionales (desde 13_catalogo_areas_operacionales_v1.yaml)
   areas_operacionales:
