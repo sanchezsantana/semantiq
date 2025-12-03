@@ -383,7 +383,7 @@
     para prevenir sobrecargas, cortocircuitos, fallas de aislamiento, incendios o
     electrocuciones. Su conocimiento avanzado en sistemas de control y protección
     es vital para la seguridad y estabilidad eléctrica en todas las áreas operacionales.
-  area_operacional: MRA,CHP,TME,STM,PLC
+  area_operacional: TME
   tareas_asociadas:
   - TME_TA_016
   clasificacion_funcional: Soporte
