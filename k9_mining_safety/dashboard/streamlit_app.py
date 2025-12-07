@@ -6,27 +6,47 @@ import time
 # ============================================================
 # CONFIGURACIÓN GENERAL
 # ============================================================
-st.set_page_config(page_title="K9 Mining Safety", layout="centered")
+st.set_page_config(page_title="K9 Mining Safety", layout="wide")
 
-# Sidebar persistente
-st.sidebar.title("K9 Mining Safety")
-st.sidebar.markdown("### *CMAS – Cognitive Multi-Agent System*")
+# ============================================================
+# CSS: AJUSTE SEGURO DE ANCHO A 800 PX (NO ROMPE EL LAYOUT)
+# ============================================================
+st.markdown("""
+<style>
+    .block-container {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-# Estado global
+    .main-block {
+        padding-bottom: 80px;
+    }
+
+    .user-bubble {
+        background-color: #444;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 6px;
+        display: inline-block;
+        max-width: 85%;
+        color: white;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ============================================================
+# ESTADO GLOBAL
+# ============================================================
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
+
 if "pending_graph" not in st.session_state:
     st.session_state["pending_graph"] = False
-if "user_input" not in st.session_state:
-    st.session_state["user_input"] = ""
-if "clear_input" not in st.session_state:
-    st.session_state["clear_input"] = False
 
-# Delays realistas
-DELAY_SIMPLE = 2.3
-DELAY_RANKING_OR_PLOT = 2.8
+DELAY_SIMPLE = 2.0
+DELAY_RANKING = 2.8
 DELAY_NARRATIVE = 3.2
-
 
 # ============================================================
 # CARGA DE DATOS
@@ -41,201 +61,231 @@ def load_data():
     df_aud = pd.read_csv("data/stde_auditorias_12s.csv")
     return df_signals, df_proactivo, df_tray, df_events, df_obs, df_aud
 
-
 df_signals, df_proactivo, df_tray, df_events, df_obs, df_aud = load_data()
 
+# ============================================================
+# SIDEBAR
+# ============================================================
+st.sidebar.title("K9 Mining Safety")
+st.sidebar.markdown("### *CMAS – Cognitive Multi-Agent System*")
+st.sidebar.markdown("---")
+
+st.sidebar.markdown("#### Historial de preguntas")
+
+for i, msg in enumerate([m for m in st.session_state["messages"] if m["role"] == "user"], start=1):
+    st.sidebar.markdown(f"{i}. {msg['content']}")
 
 # ============================================================
 # FUNCIONES AUXILIARES
 # ============================================================
 def plot_r02():
     df_r = df_signals[df_signals["riesgo_id"] == "R02"]
-
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(df_r["semana"], df_r["score"], marker="o", label="R02", color="orange")
-    ax.set_title("Evolución Semanal – R02 (Score K9)")
+    ax.plot(df_r["semana"], df_r["score"], color="orange", marker="o")
+    ax.set_title("Evolución semanal: R02")
     ax.set_xlabel("Semana")
     ax.set_ylabel("Score K9")
-    ax.legend()
     st.pyplot(fig)
-
 
 def narrative_last_month():
     st.markdown("""
 ### Análisis Narrativo del Último Mes – R01 y R02
-
-Durante el último mes, K9 analizó la evolución de los riesgos R01 y R02 integrando
-señales semanales, score K9, observaciones, auditorías y factores operacionales.
-
----
-
-#### R01 – Señales emergentes
-- Tendencia ascendente leve pero sostenida.
-- Varias observaciones OCC indican presión creciente.
-- El modelo proactivo tiende a subestimarlo, pero K9 detecta señales finas.
-
-#### R02 – Riesgo dominante
-- Continúa como el riesgo más crítico.
-- Score K9 consistentemente alto.
-- Influido por congestión, variabilidad y dotación.
-
----
-
-**Conclusión:**  
-K9 combina análisis granular y agregado para entregar una interpretación coherente del estado real.
+- R01 muestra señales emergentes previas al lunes crítico.
+- R02 se mantiene dominante.
+- Observaciones y auditorías refuerzan estas tendencias.
 """)
 
-
 def get_proactive_ranking():
-    last_week = df_proactivo["semana"].max()
-    df_last = df_proactivo[df_proactivo["semana"] == last_week].copy()
-
-    # Ordenar por score del modelo proactivo
-    score_col = [c for c in df_last.columns if "score" in c.lower()][0]
-    df_last = df_last.sort_values(score_col, ascending=False)
-
+    wk = df_proactivo["semana_id"].max()
+    df_last = df_proactivo[df_proactivo["semana_id"] == wk].copy()
+    df_last = df_last.sort_values("score_proactivo", ascending=False)
     df_last["Ranking"] = range(1, len(df_last) + 1)
     df_last = df_last.set_index("Ranking")
-
-    return last_week, df_last
-
+    return wk, df_last
 
 def get_observations_last_week():
-    last_week = df_obs["semana"].max()
-    df_last = df_obs[df_obs["semana"] == last_week]
+    wk = df_obs["semana"].max()
+    df_last = df_obs[df_obs["semana"] == wk]
     total = len(df_last)
-    n_opg = (df_last["tipo_observacion"] == "OPG").sum()
-    n_occ = (df_last["tipo_observacion"] == "OCC").sum()
-    return last_week, total, n_opg, n_occ
-
+    opg = sum(df_last["tipo_observacion"] == "OPG")
+    occ = sum(df_last["tipo_observacion"] == "OCC")
+    return wk, total, opg, occ
 
 # ============================================================
-# DESPACHADOR DE CONSULTAS
+# DESPACHADOR CON REASONING DETALLADO (YAML-LIKE)
 # ============================================================
-def handle_query(query: str):
+def handle_query(query):
     q = query.lower()
-    show_plot = False
-    show_ranking = False
-    show_narrative = False
 
-    # -------------------
-    # Fuera de dominio
-    # -------------------
+    # ============================
+    # FUERA DE DOMINIO
+    # ============================
     if "capital" in q and "chile" in q:
-        answer = (
-            "K9 está especializado exclusivamente en análisis cognitivo de seguridad operacional "
-            "y no responde preguntas generales fuera de ese dominio."
-        )
-        reasoning = (
-            "La consulta está fuera del dominio del STDE, la ontología y el modelo cognitivo K9."
-        )
-        return answer, reasoning, show_plot, show_ranking, show_narrative
+        reasoning = """reasoning:
+  dominio: fuera_del_alcance
+  acción: rechazar_pregunta
+"""
+        return ("Esa pregunta está fuera del dominio del sistema.", reasoning,
+                False, False, False)
 
-    # -------------------
-    # Observaciones última semana
-    # -------------------
+    # ============================
+    # OBSERVACIONES
+    # ============================
     if "observacion" in q or "observaciones" in q:
-        last_week, total, n_opg, n_occ = get_observations_last_week()
-        answer = (
-            f"En la semana {last_week} se registraron **{total} observaciones**: "
-            f"**{n_opg} OPG** y **{n_occ} OCC**."
-        )
-        reasoning = (
-            "Filtro la tabla de observaciones para la semana más reciente "
-            "y calculo el total y su composición por tipo."
-        )
-        return answer, reasoning, show_plot, show_ranking, show_narrative
+        wk, total, opg, occ = get_observations_last_week()
 
-    # -------------------
-    # Ranking modelo proactivo
-    # -------------------
-    if "ranking" in q and "riesgo" in q:
-        last_week, _ = get_proactive_ranking()
-        answer = (
-            f"A continuación se muestra el ranking de riesgos para la semana {last_week}, "
-            "según el modelo proactivo v4.4."
-        )
-        reasoning = (
-            "Selecciono la última semana del archivo proactivo, ordeno por score "
-            "y construyo el ranking total de riesgos."
-        )
-        show_ranking = True
-        return answer, reasoning, show_plot, show_ranking, show_narrative
+        reasoning = f"""reasoning:
+  input: observaciones_semana
+  operations:
+    - obtener_semana_actual := {wk}
+    - filtrar(semana = semana_actual)
+    - contar_total
+    - contar_por_tipo(OPG, OCC)
+  output:
+    total: {total}
+    opg: {opg}
+    occ: {occ}
+"""
+        return (f"En la semana {wk} hubo **{total} observaciones** (OPG: {opg}, OCC: {occ}).",
+                reasoning, False, False, False)
 
-    # -------------------
-    # Riesgo más importante
-    # -------------------
+    # ============================
+    # RANKING PROACTIVO
+    # ============================
+    if "ranking" in q:
+        wk, _ = get_proactive_ranking()
+
+        reasoning = f"""reasoning:
+  input: ranking_proactivo
+  operations:
+    - obtener_semana_actual := {wk}
+    - filtrar(semana = semana_actual)
+    - ordenar(score_proactivo DESC)
+    - asignar_ranking(1..n)
+"""
+        return (f"Este es el ranking de riesgos de la semana {wk}.",
+                reasoning, False, True, False)
+
+    # ============================
+    # RIESGO MÁS IMPORTANTE
+    # ============================
     if "riesgo más importante" in q or "riesgo mas importante" in q:
-        last_week = df_signals["semana"].max()
-        df_last = df_signals[df_signals["semana"] == last_week]
-        r_top = df_last.sort_values("score", ascending=False).iloc[0]["riesgo_id"]
+        wk = df_signals["semana"].max()
+        df_w = df_signals[df_signals["semana"] == wk]
+        r_top = df_w.sort_values("score", ascending=False).iloc[0]["riesgo_id"]
 
         st.session_state["pending_graph"] = True
 
-        answer = (
-            f"El riesgo más importante en la semana {last_week} es **{r_top}**.  \n"
-            "¿Quieres ver un gráfico con su evolución?"
-        )
-        reasoning = (
-            "Ordeno los riesgos por Score K9 para la última semana y selecciono el valor más alto."
-        )
-        return answer, reasoning, show_plot, show_ranking, show_narrative
+        reasoning = f"""reasoning:
+  input: señales_semana
+  operations:
+    - semana_actual := {wk}
+    - filtrar(semana = semana_actual)
+    - ordenar(score DESC)
+    - seleccionar_top(1)
+  output:
+    riesgo_mas_importante: {r_top}
+"""
+        return (f"El riesgo más importante esta semana es **{r_top}**. ¿Deseas ver un gráfico?",
+                reasoning, False, False, False)
 
-    # -------------------
-    # Solicitud de gráfico
-    # -------------------
-    if ("grafico" in q or "gráfico" in q) or (
-        (q.strip() == "si" or q.strip() == "sí")
-        and st.session_state.get("pending_graph", False)
+    # ============================
+    # GRÁFICO
+    # ============================
+    if "grafico" in q or "gráfico" in q or (
+        q.strip().lower() in ["si", "sí"] and st.session_state["pending_graph"]
     ):
         st.session_state["pending_graph"] = False
-        answer = "Aquí tienes la evolución del riesgo R02."
-        reasoning = "Genero un gráfico exclusivo del riesgo más importante, R02."
-        show_plot = True
-        return answer, reasoning, show_plot, show_ranking, show_narrative
 
-    # -------------------
-    # Narrativa mensual
-    # -------------------
-    if "narrativ" in q or "ultimo mes" in q or "último mes" in q:
-        answer = "Aquí tienes el análisis narrativo del último mes para R01 y R02."
-        reasoning = "Sintetizo señales, score y tendencias para ambos riesgos en un periodo mensual."
-        show_narrative = True
-        return answer, reasoning, show_plot, show_ranking, show_narrative
+        reasoning = """reasoning:
+  input: señales(R02)
+  operations:
+    - extraer_series_temporales
+    - generar_grafico_linea
+"""
+        return ("Aquí tienes la evolución del riesgo R02.", reasoning,
+                True, False, False)
 
-    # -------------------
-    # Respuesta por defecto
-    # -------------------
-    answer = (
-        "Puedo ayudarte con el riesgo más importante, el ranking de riesgos, "
-        "las observaciones de la última semana o la narrativa mensual de R01 y R02."
-    )
-    reasoning = "La pregunta no coincide con ninguna ruta de análisis de esta demo."
-    return answer, reasoning, show_plot, show_ranking, show_narrative
+    # ============================
+    # NARRATIVA
+    # ============================
+    if "narrativ" in q or "último mes" in q or "ultimo mes" in q:
 
+        reasoning = """reasoning:
+  input: señales(R01, R02), observaciones, auditorías
+  operations:
+    - analizar_tendencias
+    - detectar_patrones
+    - generar_resumen_narrativo
+"""
+        return ("Aquí tienes la narrativa del último mes para R01 y R02.",
+                reasoning, False, False, True)
+
+    # ============================
+    # DEFAULT
+    # ============================
+    reasoning = """reasoning:
+  acción: fallback
+  opciones_validas:
+    - ranking
+    - riesgo más importante
+    - observaciones
+    - narrativa
+"""
+    return ("Puedo ayudarte con: ranking, riesgo más importante, observaciones o narrativa.",
+            reasoning, False, False, False)
 
 # ============================================================
-# INPUT DEL USUARIO (arriba, estilo chat GPT)
+# BLOQUE PRINCIPAL DEL CHAT
 # ============================================================
+st.markdown('<div class="main-block">', unsafe_allow_html=True)
+st.markdown("### Conversación")
 
-# Limpiar input ANTES de renderizar
-if st.session_state.get("clear_input", False):
-    st.session_state["user_input"] = ""
-    st.session_state["clear_input"] = False
+for msg in st.session_state["messages"]:
+    st.markdown("---")
 
-query = st.text_input("Escribe tu pregunta:", key="user_input")
-submit = st.button("Enviar")
+    if msg["role"] == "user":
+        st.markdown(
+            f'<div class="user-bubble"><strong>Pregunta:</strong> {msg["content"]}</div>',
+            unsafe_allow_html=True
+        )
 
-if submit and query.strip():
-    st.session_state["messages"].append({"role": "user", "content": query.strip()})
+    else:
+        with st.expander("Ver reasoning (nodo cognitivo)"):
+            st.text(msg["reasoning"])
+
+        st.markdown(f"**Respuesta:** {msg['content']}")
+
+        if msg.get("show_rank"):
+            wk, df_rank = get_proactive_ranking()
+            st.dataframe(df_rank, use_container_width=True)
+
+        if msg.get("show_plot"):
+            plot_r02()
+
+        if msg.get("show_narrative"):
+            narrative_last_month()
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+# ============================================================
+# INPUT FIJO — CHAT NATIVO STREAMLIT
+# ============================================================
+query = st.chat_input("Escribe tu pregunta:")
+
+if query:
+    st.session_state["messages"].append({
+        "role": "user",
+        "content": query.strip()
+    })
 
     with st.spinner("Procesando..."):
-        answer, reasoning, show_plot, show_ranking, show_narrative = handle_query(query.strip())
+        answer, reasoning, show_plot, show_rank, show_narrative = handle_query(query.strip())
 
         if show_narrative:
             time.sleep(DELAY_NARRATIVE)
-        elif show_ranking or show_plot:
-            time.sleep(DELAY_RANKING_OR_PLOT)
+        elif show_plot or show_rank:
+            time.sleep(DELAY_RANKING)
         else:
             time.sleep(DELAY_SIMPLE)
 
@@ -244,37 +294,9 @@ if submit and query.strip():
         "content": answer,
         "reasoning": reasoning,
         "show_plot": show_plot,
-        "show_ranking": show_ranking,
-        "show_narrative": show_narrative
+        "show_rank": show_rank,
+        "show_narrative": show_narrative,
     })
 
-    st.session_state["clear_input"] = True
     st.rerun()
 
-
-# ============================================================
-# HISTORIAL DE MENSAJES (debajo del input)
-# ============================================================
-st.markdown("### Conversación")
-
-for msg in st.session_state["messages"]:
-    st.markdown("---")
-
-    if msg["role"] == "user":
-        st.markdown(f"**Pregunta:** {msg['content']}")
-    else:
-        if msg.get("reasoning"):
-            st.markdown(f"*Reasoning:*  \n*{msg['reasoning']}*")
-            st.markdown("<hr style='border: 0.5px solid #444444;'>", unsafe_allow_html=True)
-
-        st.markdown(f"**Respuesta:** {msg['content']}")
-
-        if msg.get("show_ranking"):
-            _, df_rank = get_proactive_ranking()
-            st.dataframe(df_rank, use_container_width=True)
-
-        if msg.get("show_plot"):
-            plot_r02()
-
-        if msg.get("show_narrative"):
-            narrative_last_month()
