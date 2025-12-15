@@ -1,4 +1,5 @@
 from langgraph.graph import StateGraph, START, END
+
 from src.state.state import K9State
 
 # --- Nodos base del pipeline ---
@@ -7,13 +8,15 @@ from src.nodes.domain_guardrail import domain_guardrail
 from src.nodes.load_context import load_context
 from src.nodes.llm_node import llm_node
 from src.nodes.router import router_node
+from src.nodes.analyst_node import analyst_node
+from src.nodes.narrative_node import narrative_node
 
 # --- Nodos cognitivos K9 ---
 from src.nodes.proactive_model_node import proactive_model_node
 from src.nodes.riesgos_node import riesgos_node
 from src.nodes.fallback_node import fallback_node
 from src.nodes.semantic_retrieval_node import semantic_retrieval_node
-from src.nodes.bowtie_node import bowtie_node   # ← NUEVO IMPORT
+from src.nodes.bowtie_node import bowtie_node
 
 
 def build_k9_graph():
@@ -25,35 +28,34 @@ def build_k9_graph():
     graph.add_node("intent", intent_classifier)
     graph.add_node("guardrail", domain_guardrail)
     graph.add_node("context", load_context)
-    graph.add_node("semantic_retrieval", semantic_retrieval_node)
+    graph.add_node("analyst", analyst_node)
 
-    # Router Node
+    # Router
     graph.add_node("router", router_node)
 
-    # Nodos existentes
+    # Ramas funcionales
     graph.add_node("llm", llm_node)
-
-    # --------------------------------------------------------------------------------------------------------------
-    #                                           NODOS COGNITIVOS K9
-    # --------------------------------------------------------------------------------------------------------------
+    graph.add_node("semantic_retrieval", semantic_retrieval_node)
     graph.add_node("proactive_model", proactive_model_node)
     graph.add_node("riesgos", riesgos_node)
+    graph.add_node("bowtie", bowtie_node)
     graph.add_node("fallback", fallback_node)
-    graph.add_node("bowtie", bowtie_node)  # ← NODO REGISTRADO AQUÍ (orden correcto)
+
+    # Narrative (SALIDA ÚNICA)
+    graph.add_node("narrative", narrative_node)
 
     # --------------------------------------------------------------------------------------------------------------
-    #                                           FLUJO PRINCIPAL BASELINE
+    #                                           FLUJO PRINCIPAL
     # --------------------------------------------------------------------------------------------------------------
     graph.add_edge(START, "intent")
     graph.add_edge("intent", "guardrail")
     graph.add_edge("guardrail", "context")
-    graph.add_edge("context", "router")
+    graph.add_edge("context", "analyst")
+    graph.add_edge("analyst", "router")
 
     # --------------------------------------------------------------------------------------------------------------
     #                                           ROUTER (CONDITIONAL EDGES)
-    #   ⚠ LangGraph 1.0.3 NO soporta "default=", por lo que el fallback se maneja manualmente
     # --------------------------------------------------------------------------------------------------------------
-
     def route_intent(state: K9State):
         intent = state.intent
 
@@ -63,10 +65,9 @@ def build_k9_graph():
             "riesgos",
             "mining_general",
             "general_question",
-            "bowtie",  # ← nuevo intent permitido
+            "bowtie",
         ]
 
-        # Fallback manual
         if intent not in valid_intents:
             state.reasoning.append(
                 f"Router Node: intent '{intent}' no reconocido → fallback."
@@ -91,12 +92,15 @@ def build_k9_graph():
     )
 
     # --------------------------------------------------------------------------------------------------------------
-    #                                           SALIDAS DEL GRAFO
+    #                                           SALIDAS → NARRATIVE → END
     # --------------------------------------------------------------------------------------------------------------
-    graph.add_edge("llm", END)
-    graph.add_edge("proactive_model", END)
-    graph.add_edge("riesgos", END)
-    graph.add_edge("fallback", END)
-    graph.add_edge("bowtie", END)
+    graph.add_edge("llm", "narrative")
+    graph.add_edge("proactive_model", "narrative")
+    graph.add_edge("riesgos", "narrative")
+    graph.add_edge("semantic_retrieval", "narrative")
+    graph.add_edge("bowtie", "narrative")
+    graph.add_edge("fallback", "narrative")
+
+    graph.add_edge("narrative", END)
 
     return graph.compile()

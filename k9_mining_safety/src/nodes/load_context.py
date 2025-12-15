@@ -4,7 +4,7 @@ def load_context(state: K9State) -> K9State:
     """
     Nodo 3 del grafo K9 Mining Safety.
     Carga el contexto operativo mínimo que el agente necesita para razonar.
-    Versión 0.1: contexto estático, sin Redis aún.
+    Versión 0.2: alineado con K9State v3.2.
     """
 
     context = {
@@ -31,11 +31,11 @@ def load_context(state: K9State) -> K9State:
             "INC": "Incidente",
             "HZD": "Peligro detectado"
         },
-        "version_contexto": "0.1"
+        "version_contexto": "0.2"
     }
 
-    # Guardamos el contexto en el estado
-    state.context = context
-    state.reasoning.append("Load Context: contexto operativo básico cargado (v0.1).")
+    # Guardamos el contexto estructural en el state v3.2
+    state.context_bundle = context
+    state.reasoning.append("Load Context: contexto estructural cargado (v0.2).")
 
     return state
