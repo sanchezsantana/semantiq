@@ -1,4 +1,5 @@
 import re
+from src import state
 from src.state.state import K9State
 
 def intent_classifier(state: K9State) -> K9State:
@@ -18,19 +19,76 @@ def intent_classifier(state: K9State) -> K9State:
         state.reasoning.append("Intent detected: greeting")
         return state
 
+
     # --------------------------
-    # 2. PREGUNTAS DEL MODELO PROACTIVO
+    # 2. MODELO PROACTIVO — CONTRAFACTUAL (PRIORIDAD)
+    # --------------------------
+    if (
+        ("modelo proactivo" in query or "proactive model" in query)
+        and any(
+            k in query for k in [
+                "si",
+                "subestima",
+                "se equivoca",
+                "falla",
+                "qué pasaría",
+                "en caso de",
+                "debería priorizarse",
+                "deberían preocupar",
+            ]
+        )
+    ):
+        state.intent = "proactive_model_contrafactual"
+        state.reasoning.append(
+            "Intent detected: proactive model (contrafactual / precautorio)"
+        )
+        return state
+
+    # --------------------------
+    # 2.1 MODELO PROACTIVO — DIAGNÓSTICO
     # --------------------------
     if "modelo proactivo" in query or "proactive model" in query:
         state.intent = "proactive_model"
-        state.reasoning.append("Intent detected: proactive model")
+        state.reasoning.append(
+            "Intent detected: proactive model (diagnóstico)"
+        )
         return state
+
+    
     # --------------------------
-    # 2.1. PREGUNTAS DE BOWTIE
+    # 2.2. PREGUNTAS DE BOWTIE
     # --------------------------
     if "bowtie" in query or "bow tie" in query or "corbatín" in query:
         state.intent = "bowtie"
         state.reasoning.append("Intent detected: bowtie")
+        return state
+    # --------------------------
+    # 6. ANALYST (INTERPRETACIÓN)
+    # --------------------------
+    analyst_keywords = [
+        "qué significa",
+        "interpretación",
+        "es bueno",
+        "es malo",
+        "tendencia",
+        "análisis",
+        "empeor",
+        "mejor",
+        "progres",
+        "evoluc",
+        "increment",
+        "degrad",
+        "aument",
+        "disminu",
+        "cambiando",
+        "últimas semanas",
+        "últimos días",
+        "último mes",
+        "con el tiempo",                        
+    ]
+    if any(k in query for k in analyst_keywords):
+        state.intent = "analyst"
+        state.reasoning.append("Intent detected: analyst interpretation")
         return state
 
     # --------------------------
@@ -78,18 +136,10 @@ def intent_classifier(state: K9State) -> K9State:
     # --------------------------
     predictor_keywords = ["predecir", "proyección", "riesgo futuro", "probabilidad", "forecast"]
     if any(k in query for k in predictor_keywords):
-        state.intent = "predictor"
+        state.intent =  "analyst"  # "predictor" es eliminado para Fase 1
         state.reasoning.append("Intent detected: predictor request")
         return state
 
-    # --------------------------
-    # 6. ANALYST (INTERPRETACIÓN)
-    # --------------------------
-    analyst_keywords = ["qué significa", "interpretación", "es bueno", "es malo", "tendencia", "análisis"]
-    if any(k in query for k in analyst_keywords):
-        state.intent = "analyst"
-        state.reasoning.append("Intent detected: analyst interpretation")
-        return state
 
     # --------------------------
     # 7. FALLBACK

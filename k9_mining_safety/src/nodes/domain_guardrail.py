@@ -10,6 +10,7 @@ def domain_guardrail(state: K9State) -> K9State:
     MINING_INTENTS = {
         "greeting",
         "proactive_model",
+        "proactive_model_contrafactual",
         "riesgos",
         "risk_caida_altura",
         "risk_caida_objetos",
@@ -22,6 +23,7 @@ def domain_guardrail(state: K9State) -> K9State:
         "consulta_area",
         "consulta_bowtie",
         "bowtie",
+        "analyst",
     }
 
     # --------------------------
@@ -45,9 +47,20 @@ def domain_guardrail(state: K9State) -> K9State:
     ]
 
     if state.intent == "general_question":
+
+        # FASE 1 / FASE 2:
+        # Si ya existe contexto operativo cargado, se acepta como dominio minería
+        if state.context_bundle or state.signals or state.analysis:
+            state.reasoning.append(
+                "Domain Guardrail: 'general_question' aceptada por contexto operativo activo."
+            )
+            state.intent = "mining_general"
+            return state
+
+        # Fallback clásico por keywords explícitas
         if any(k in state.user_query.lower() for k in mining_keywords):
             state.reasoning.append(
-                f"Domain Guardrail: 'general_question' contiene señales de minería, se acepta."
+                "Domain Guardrail: 'general_question' contiene señales de minería, se acepta."
             )
             return state
 
@@ -55,9 +68,10 @@ def domain_guardrail(state: K9State) -> K9State:
         state.intent = "out_of_domain"
         state.demo_mode = True
         state.reasoning.append(
-            "Domain Guardrail: 'general_question' sin señales de minería → fuera de dominio (demo_mode=True)."
+            "Domain Guardrail: 'general_question' sin señales de minería ni contexto → fuera de dominio (demo_mode=True)."
         )
         return state
+
 
     # --------------------------
     # 3) Todo lo demás → fuera de dominio

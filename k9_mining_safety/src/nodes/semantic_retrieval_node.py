@@ -1,3 +1,4 @@
+#from panel import state
 from src.state.state import K9State
 
 def semantic_retrieval_node(state: K9State) -> K9State:
@@ -7,7 +8,8 @@ def semantic_retrieval_node(state: K9State) -> K9State:
     """
 
     query = state.user_query.lower()
-    ctx = state.context or {}
+    #ctx = state.context or {}
+    ctx = state.context_bundle or {}
 
     # --------------------------
     # 1. ÁREAS OPERACIONALES

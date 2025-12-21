@@ -24,5 +24,8 @@ class K9State(BaseModel):
     # Análisis cognitivo estructurado (AnalystNode)
     analysis: Optional[Dict[str, Any]] = None
 
+    # Enriquecimiento operacional (OCC con riesgo y control) — FASE 2
+    risk_enrichment: Optional[Dict[str, Any]] = None
+
     # Salida final
     answer: Optional[str] = None

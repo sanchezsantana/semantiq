@@ -65,7 +65,11 @@ def data_engine_node(state: K9State) -> K9State:
 
     for col in risk_columns:
         riesgo_id = col.replace("criticidad_", "").replace("_media", "")
-        values = df_tray[col].tolist()
+        values = (
+            df_tray
+            .sort_values("semana")[col]
+            .tolist()
+        )
 
         engine_analysis["risk_trends"][riesgo_id] = {
             "weekly_values": values,
@@ -101,44 +105,43 @@ def data_engine_node(state: K9State) -> K9State:
         }
     # =====================================================
     # Bloque 3 — Observaciones operacionales (OPG / OCC)
-    # Vista FASE 1 (sin enriquecimiento semántico)
+    # FASE 1 — vista unificada
     # =====================================================
 
-    df_obs = dm.get_observaciones()
+    df_obs = dm.get_observaciones_all()
 
     engine_analysis["observations"] = {
-        "by_type": {
-            "OPG": {"total": 0, "weekly_counts": {}},
-            "OCC": {"total": 0, "weekly_counts": {}},
+        "summary": {
+            "total": int(len(df_obs)),
+            "by_type": {}
+        },
+        "weekly": {
+            "OPG": {},
+            "OCC": {}
+        },
+        "sources": {
+            "baseline": "stde_observaciones.csv",
+            "stde": "stde_observaciones_12s.csv"
         }
     }
 
-    required_cols = {"semana", "tipo_observacion"}
-    missing = required_cols - set(df_obs.columns)
-    if missing:
-        raise KeyError(f"stde_observaciones_12s.csv missing columns: {missing}")
-
     for obs_type in ["OPG", "OCC"]:
-        df_type = df_obs[df_obs["tipo_observacion"] == obs_type]
+        df_t = df_obs[df_obs["tipo_observacion"] == obs_type]
 
-        total_count = int(len(df_type))
-        weekly_counts = (
-            df_type.groupby("semana")
+        engine_analysis["observations"]["summary"]["by_type"][obs_type] = int(len(df_t))
+
+        weekly = (
+            df_t.groupby("semana")
             .size()
             .to_dict()
         )
 
-        # Normalizar claves a int
-        weekly_counts = {int(k): int(v) for k, v in weekly_counts.items()}
-
-        engine_analysis["observations"]["by_type"][obs_type] = {
-            "total": total_count,
-            "weekly_counts": weekly_counts,
+        engine_analysis["observations"]["weekly"][obs_type] = {
+            int(k): int(v) for k, v in weekly.items()
         }
+        
 
-    state.reasoning.append(
-        "DataEngineNode FASE 1: calculados conteos operacionales de observaciones (OPG/OCC)."
-    )
+    
     
     # =====================================================
     # Bloque 4 — Proactivo vs K9 (Baseline PRE lunes crítico)
@@ -181,9 +184,6 @@ def data_engine_node(state: K9State) -> K9State:
                 ),
             }
 
-    state.reasoning.append(
-        "DataEngineNode FASE 1: comparado ranking Proactivo vs K9 (Bloque 4)."
-    )
 
 
     # =====================================================
@@ -194,7 +194,8 @@ def data_engine_node(state: K9State) -> K9State:
     state.analysis["engine"] = engine_analysis
 
     state.reasoning.append(
-        "DataEngineNode FASE 1: calculadas trayectorias y señales semanales (Bloques 1–2)."
+    "DataEngineNode FASE 1: análisis determinista completo ejecutado "
+    "(trayectorias, señales, observaciones y comparación Proactivo vs K9)."
     )
 
     return state

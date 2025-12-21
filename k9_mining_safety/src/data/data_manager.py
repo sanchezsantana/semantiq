@@ -52,6 +52,21 @@ class DataManager:
         Observaciones OPG / OCC por semana
         """
         return self._load_csv("stde_observaciones_12s.csv")
+    
+    def get_observaciones_all(self) -> pd.DataFrame:
+        """
+        Unifica observaciones baseline + STDE 12 semanas
+        """
+        df_base = self._load_csv("stde_observaciones.csv")
+        df_12s = self._load_csv("stde_observaciones_12s.csv")
+        df = pd.concat([df_base, df_12s], ignore_index=True)
+
+        required_cols = {"semana", "tipo_observacion"}
+        missing = required_cols - set(df.columns)
+        if missing:
+            raise KeyError(f"Observaciones missing columns: {missing}")
+
+        return df
 
     def get_proactivo_semanal(self) -> pd.DataFrame:
         """
