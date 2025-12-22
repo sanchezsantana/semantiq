@@ -13,6 +13,8 @@ from src.nodes.occ_enrichment_node import occ_enrichment_node
 from src.nodes.analyst_node import analyst_node
 from src.nodes.router import router_node
 from src.nodes.narrative_node import narrative_node
+from src.nodes.metrics_node import metrics_node
+
 
 # --------------------------------------------------------------------------------------------------
 # NODOS FUNCIONALES / COGNITIVOS
@@ -38,6 +40,8 @@ def build_k9_graph():
     graph.add_node("data_engine", data_engine_node)
     graph.add_node("occ_enrichment", occ_enrichment_node)
     graph.add_node("analyst", analyst_node)
+    graph.add_node("metrics", metrics_node)
+
 
     # Gobernanza
     graph.add_node("router", router_node)
@@ -61,7 +65,8 @@ def build_k9_graph():
     graph.add_edge("context", "data_engine")
     graph.add_edge("data_engine", "occ_enrichment")
     graph.add_edge("occ_enrichment", "analyst")
-    graph.add_edge("analyst", "router")
+    graph.add_edge("analyst", "metrics")
+    graph.add_edge("metrics", "router")
 
     # ==============================================================================================
     # ROUTER DE INTENCIÓN (GOBERNANZA, NO COGNICIÓN)
